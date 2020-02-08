@@ -1,0 +1,25 @@
+﻿<Window x:Class="CustomCrawler.CustomCrawlerClusterCapture"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomCrawler"
+        mc:Ignorable="d"
+        Title="Custom Crawler Cluster - Capture" Height="124" Width="434" WindowStartupLocation="CenterScreen">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Tag: " FontSize="20"/>
+        <TextBox x:Name="Tag" Grid.Row="0" Grid.Column="1" FontSize="20" HorizontalAlignment="Stretch" KeyDown="Tag_KeyDown"/>
+
+        <Button x:Name="Insert" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Insert" FontSize="15" Margin="0 16 0 0" HorizontalAlignment="Right" Width="200" Click="Insert_Click"/>
+    </Grid>
+</Window>

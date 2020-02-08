@@ -1,0 +1,31 @@
+﻿<Window x:Class="CustomCrawler.CustomCrawlerDiff"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomCrawler"
+        mc:Ignorable="d"
+        Title="Custom Crawler Diff" Height="450" Width="800">
+    
+    <Grid Margin="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="URL1: " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox x:Name="URL1Text" Grid.Row="0" Grid.Column="1" FontSize="15"/>
+
+        <TextBlock Margin="0 4 0 0" Grid.Row="1" Grid.Column="0" Text="URL2: " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox x:Name="URL2Text" Margin="0 4 0 0" Grid.Row="1" Grid.Column="1" FontSize="15"/>
+
+        <Button Margin="8 0 0 0" Click="Button_Click" Grid.Row="0" Grid.Column="2" Grid.RowSpan="1" Content="Diff" Width="120"/>
+
+    </Grid>
+</Window>

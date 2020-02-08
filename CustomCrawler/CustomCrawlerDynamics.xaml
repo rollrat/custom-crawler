@@ -1,0 +1,31 @@
+﻿<Window x:Class="CustomCrawler.CustomCrawlerDynamics"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomCrawler"
+        mc:Ignorable="d"
+        Title="Custom Crawler Dynamics" Height="485.553" Width="1109.819">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock FontSize="15" Text="URL: " Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="URLText" Grid.Row="0" Grid.Column="1" FontSize="15"/>
+        <Button Grid.Row="0" Grid.Column="2" Content="Navigate" Width="120" Margin="4 0 0 0" Click="Button_Click"/>
+
+        <Border Grid.Row="1" Grid.ColumnSpan="3" Margin="0 4 0 0" BorderThickness="1" BorderBrush="LightGray">
+            <ContentControl x:Name="browserContainer" Content="Browser goes here" Grid.Row="1"/>
+        </Border>
+
+    </Grid>
+</Window>
