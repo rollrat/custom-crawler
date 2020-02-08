@@ -29,9 +29,9 @@ using CustomCrawler.chrome_devtools;
 
 namespace CustomCrawler
 {
-    public partial class CustomCrawler : Window
+    public partial class MainWindow : Window
     {
-        public CustomCrawler()
+        public MainWindow()
         {
             InitializeComponent();
 
