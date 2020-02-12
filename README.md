@@ -4,6 +4,8 @@ https://www.youtube.com/watch?v=OpTKLNjUdwQ
 
 `Custom Crawler` is a tool for automatic crawler generation.
 
+한국어 설명: https://github.com/inha-project/custom-crawler-concept
+
 ## 0. Download
 
 Latest Version: https://github.com/rollrat/custom-crawler/releases/download/2020.02.09/CC.2020.02.09.zip
