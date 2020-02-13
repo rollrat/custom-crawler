@@ -92,6 +92,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -147,6 +148,7 @@
     <Compile Include="HtmlCAL.cs" />
     <Compile Include="HtmlTree.cs" />
     <Compile Include="SeleniumWrapper.cs" />
+    <Compile Include="URLHelper.cs" />
     <Compile Include="Utils.cs" />
     <Page Include="CustomCrawler.xaml">
       <Generator>MSBuild:Compile</Generator>
