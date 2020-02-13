@@ -250,24 +250,43 @@ namespace CustomCrawler
 
         public bool IsEqualStructure(HtmlTree tree)
         {
-            return equal_internal(root_node, tree.root_node);
+            equals = true;
+            equal_internal(root_node, tree.root_node);
+            return equals;
         }
 
         List<(HtmlNode, HtmlNode)> diff_node;
-        private bool equal_internal(HtmlNode lhs, HtmlNode rhs)
+        bool equals;
+        private void equal_internal(HtmlNode lhs, HtmlNode rhs)
         {
-            if (lhs.Name != rhs.Name)
-                return false;
+            if (lhs.Name != rhs.Name || lhs.ChildNodes.Count != rhs.ChildNodes.Count)
+            {
+                diff_node.Add((lhs, rhs));
+                equals = false;
+                return;
+            }
 
-            if (diff_node != null && (!lhs.Attributes.SequenceEqual(rhs.Attributes) || (lhs.Name == "#text" && lhs.InnerText != rhs.InnerText)))
+            if (diff_node != null && (!IsEqual(lhs.Attributes, rhs.Attributes) || (lhs.Name == "#text" && lhs.InnerText != rhs.InnerText)))
                 diff_node.Add((lhs, rhs));
 
-            if (lhs.ChildNodes.Count != rhs.ChildNodes.Count)
+            for (int i = 0; i < lhs.ChildNodes.Count; i++)
+                equal_internal(lhs.ChildNodes[i], rhs.ChildNodes[i]);
+
+            return;
+        }
+
+        public static bool IsEqual(HtmlAttributeCollection attr1, HtmlAttributeCollection attr2 )
+        {
+            if (attr1.Count != attr2.Count)
                 return false;
 
-            for (int i = 0; i < lhs.ChildNodes.Count; i++)
-                if (!equal_internal(lhs.ChildNodes[i], rhs.ChildNodes[i]))
+            for (int i = 0; i < attr1.Count; i++)
+            {
+                if (attr1[i].Name != attr2[i].Name)
                     return false;
+                if (attr1[i].Value != attr2[i].Value)
+                    return false;
+            }
 
             return true;
         }
@@ -275,7 +294,9 @@ namespace CustomCrawler
         public (bool, List<(HtmlNode, HtmlNode)>) Diff(HtmlTree tree)
         {
             diff_node = new List<(HtmlNode, HtmlNode)>();
-            return (equal_internal(root_node, tree.root_node), diff_node);
+            equals = true;
+            equal_internal(root_node, tree.root_node);
+            return (equals, diff_node);
         }
 
         #endregion

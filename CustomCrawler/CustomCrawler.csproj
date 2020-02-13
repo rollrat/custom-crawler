@@ -143,6 +143,7 @@
     <Compile Include="chrome-devtools\Types\Network\SecurityDetails.cs" />
     <Compile Include="chrome-devtools\Types\Runtime\CallFrame.cs" />
     <Compile Include="chrome-devtools\Types\Runtime\StackTrace.cs" />
+    <Compile Include="CustomCrawlerDiffDataGridViewModel.cs" />
     <Compile Include="HtmlCAL.cs" />
     <Compile Include="HtmlTree.cs" />
     <Compile Include="SeleniumWrapper.cs" />
