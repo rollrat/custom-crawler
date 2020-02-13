@@ -245,5 +245,39 @@ namespace CustomCrawler
         }
 
         #endregion
+
+        #region Diff
+
+        public bool IsEqualStructure(HtmlTree tree)
+        {
+            return equal_internal(root_node, tree.root_node);
+        }
+
+        List<(HtmlNode, HtmlNode)> diff_node;
+        private bool equal_internal(HtmlNode lhs, HtmlNode rhs)
+        {
+            if (lhs.Name != rhs.Name)
+                return false;
+
+            if (diff_node != null && (!lhs.Attributes.SequenceEqual(rhs.Attributes) || (lhs.Name == "#text" && lhs.InnerText != rhs.InnerText)))
+                diff_node.Add((lhs, rhs));
+
+            if (lhs.ChildNodes.Count != rhs.ChildNodes.Count)
+                return false;
+
+            for (int i = 0; i < lhs.ChildNodes.Count; i++)
+                if (!equal_internal(lhs.ChildNodes[i], rhs.ChildNodes[i]))
+                    return false;
+
+            return true;
+        }
+
+        public (bool, List<(HtmlNode, HtmlNode)>) Diff(HtmlTree tree)
+        {
+            diff_node = new List<(HtmlNode, HtmlNode)>();
+            return (equal_internal(root_node, tree.root_node), diff_node);
+        }
+
+        #endregion
     }
 }
