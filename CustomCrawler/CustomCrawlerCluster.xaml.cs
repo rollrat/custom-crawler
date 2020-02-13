@@ -501,11 +501,11 @@ namespace CustomCrawler
                 pattern.Nodes.ForEach(x => builder.Append($"    public string {x.Item1};\r\n"));
                 builder.Append("}\r\n");
                 builder.Append("\r\n");
-                builder.Append("public Pattern Extract(string html)\r\n");
+                builder.Append("public List<Pattern> Extract(string html)\r\n");
                 builder.Append("{\r\n");
                 builder.Append("    HtmlDocument document = new HtmlDocument();\r\n");
                 builder.Append("    document.LoadHtml(html);\r\n");
-                builder.Append("    var result = new Pattern();\r\n");
+                builder.Append("    var result = new List<Pattern>();\r\n");
                 builder.Append("    var root_node = document.DocumentNode;\r\n");
 
                 if (tcpattern[0] == '/')
@@ -514,20 +514,21 @@ namespace CustomCrawler
                     builder.Append("    {\r\n");
                     builder.Append($"        var node = root_node.SelectSingleNode($\"{tcpattern}\");\r\n");
                     builder.Append($"        if (node == null) break;\r\n");
+                    builder.Append($"        var pattern = new Pattern();\r\n");
                     foreach (var pp in pattern.Nodes)
                     {
                         var postfix = pp.Item2.XPath.Replace(pattern.LCA.XPath, "");
                         if (hh.Contains(pp.Item2))
                         {
-                            builder.Append($"        result.{pp.Item1} = node.SelectSingleNode(\".{postfix}\").InnerText;\r\n");
+                            builder.Append($"        pattern.{pp.Item1} = node.SelectSingleNode(\".{postfix}\").InnerText;\r\n");
                         }
                         else
                         {
                             builder.Append($"        if (node.SelectSingleNode(\".{postfix}\") != null)\r\n");
-                            builder.Append($"            result.{pp.Item1} = node.SelectSingleNode(\".{postfix}\").InnerText;\r\n");
+                            builder.Append($"            pattern.{pp.Item1} = node.SelectSingleNode(\".{postfix}\").InnerText;\r\n");
                         }
                     }
-                    builder.Append($"        \r\n");
+                    builder.Append($"        result.Add(pattern);\r\n");
                     builder.Append("    }\r\n");
                 }
                 else
@@ -535,6 +536,7 @@ namespace CustomCrawler
 
                 }
 
+                builder.Append($"    return result;\r\n");
                 builder.Append("}\r\n");
 
 
