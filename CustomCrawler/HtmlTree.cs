@@ -122,6 +122,9 @@ namespace CustomCrawler
         /// <returns></returns>
         public HtmlNode GetLCANode(List<Tuple<int, HtmlNode>> list)
         {
+            if (list.Count == 1)
+                return list[0].Item2;
+
             var min_depth = list.Min(x => x.Item1);
 
             for (int i = 0; i < list.Count; i++)
