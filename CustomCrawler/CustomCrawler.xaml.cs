@@ -496,7 +496,7 @@ namespace CustomCrawler
         private void Cluster_Click(object sender, RoutedEventArgs e)
         {
             if (tree != null)
-                new CustomCrawlerCluster(root_url, tree).Show();
+                new CustomCrawlerCluster(original_url, tree).Show();
         }
 
         private void Dynamics_Click(object sender, RoutedEventArgs e)
