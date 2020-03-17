@@ -58,7 +58,11 @@ namespace CustomCrawler
             {
                 if (request.Url.EndsWith(".js") && !JsManager.Instance.Contains(request.Url))
                 {
-                    JsManager.Instance.Register(request.Url, NetCommon.DownloadString(request.Url));
+                    try
+                    {
+                        JsManager.Instance.Register(request.Url, NetCommon.DownloadString(request.Url));
+                    }
+                    catch { }
                 }
                 return null;
             }
