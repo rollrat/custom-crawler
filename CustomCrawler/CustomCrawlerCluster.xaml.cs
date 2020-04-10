@@ -68,6 +68,10 @@ namespace CustomCrawler
                     if (tree[i][j].Name != "#comment" && tree[i][j].Name != "#text")
                     {
                         tree[i][j].SetAttributeValue("ccw_tag", $"ccw_{i}_{j}");
+                        if (tree[i][j].Attributes.Contains("onmouseenter"))
+                            tree[i][j].SetAttributeValue("origin_onmouseenter", tree[i][j].GetAttributeValue("onmouseenter", ""));
+                        if (tree[i][j].Attributes.Contains("onmouseleave"))
+                            tree[i][j].SetAttributeValue("origin_onmouseleave", tree[i][j].GetAttributeValue("onmouseleave", ""));
                         tree[i][j].SetAttributeValue("onmouseenter", $"ccw.hoverelem('ccw_{i}_{j}')");
                         tree[i][j].SetAttributeValue("onmouseleave", $"ccw.hoverelem('ccw_{i}_{j}')");
                     }
@@ -705,6 +709,18 @@ namespace CustomCrawler
                         builder.Append("}\r\n");
 
                         instance.CurrentCode.Text = builder.ToString();
+
+                        builder.Clear();
+                        var cf = new Func<string, string>((x) =>
+                        {
+                            if (x == "origin_onmouseenter") return "onmouseetner";
+                            if (x == "origin_onmouseleave") return "onmouseleave";
+                            return x;
+                        });
+                        selected_node.Attributes.Where(x => !new [] { "onmouseenter", "onmouseleave", "ccw_tag" }.Contains(x.Name))
+                            .ToList().ForEach(x => builder.Append($"{cf(x.Name)}=\"{x.Value}\"\r\n"));
+
+                        instance.Attributes.Text = builder.ToString();
                     }
                     catch { }
                 }));
