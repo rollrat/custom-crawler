@@ -11,7 +11,7 @@
         <BooleanToVisibilityConverter x:Key="b2v" />
     </Window.Resources>
     
-    <Grid Margin="8">
+    <Grid Margin="8" x:Name="g1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -93,17 +93,23 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Attr: " Grid.Column="0" Margin="0 4 0 0" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                    <TextBox x:Name="Attributes" Grid.Row="1" Grid.Column="1" Margin="0 4 0 0" FontSize="15" AcceptsReturn="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto"/>
+
+                    <!--<Grid VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" AcceptsReturn="True" >
+                        <DockPanel>-->
+                    <RichTextBox x:Name="Attributes" Grid.Row="1" Grid.Column="1" Margin="0 4 0 0" FontSize="15" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" />
+                        <!--</DockPanel>
+                    </Grid>-->
                 </Grid>
             </Border>
 
             <TextBlock Grid.Column="0" Grid.Row="3" Text="FILTER: " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 4 0 0"/>
             <TextBox x:Name="Filter" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Margin="0 4 0 0" TextChanged="Filter_TextChanged"/>
+
         </Grid>
 
-        <GridSplitter Grid.Column="1"
+        <GridSplitter Grid.Column="1" x:Name="gs1"
             ShowsPreview="True"
-            Width="2" 
+            Width="2" ResizeBehavior="BasedOnAlignment"
             HorizontalAlignment="Center"
             VerticalAlignment="Stretch"/>
 
@@ -145,7 +151,8 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Stretch"/>
 
-        <Grid Grid.Column="4" Width="500">
+        <Grid Grid.Column="4">
+            <!--Width="500"-->
             <StackPanel>
                 <GroupBox Header="CaptureList" Height="300">
                     <Grid>
@@ -263,10 +270,10 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="XPath: " Grid.Row="0" Grid.Column="0" FontSize="15" VerticalAlignment="Center"/>
-                        <TextBox x:Name="CurrentXPath" Grid.Row="0" Grid.Column="1" FontSize="15"/>
+                        <RichTextBox x:Name="CurrentXPath" Grid.Row="0" Grid.Column="1" FontSize="15"/>
                         
                         <TextBlock Text="Code: " Grid.Row="1" Grid.Column="0" Margin="0 4 0 0" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                        <TextBox x:Name="CurrentCode" Grid.Row="1" Grid.Column="1" Margin="0 4 0 0" FontSize="15" AcceptsReturn="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto"/>
+                        <RichTextBox x:Name="CurrentCode" Grid.Row="1" Grid.Column="1" Margin="0 4 0 0" FontSize="15" AcceptsReturn="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto"/>
                     </Grid>
                 </Border>
             </StackPanel>

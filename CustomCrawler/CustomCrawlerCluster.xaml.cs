@@ -79,6 +79,22 @@ namespace CustomCrawler
             }
 
             KeyDown += CustomCrawlerCluster_KeyDown;
+            Loaded += CustomCrawlerCluster_Loaded;
+        }
+
+        private void CustomCrawlerCluster_Loaded(object sender, RoutedEventArgs e)
+        {
+            Task.Run(() =>
+            {
+                Thread.Sleep(500);
+                Application.Current.Dispatcher.BeginInvoke(new Action(
+                delegate
+                {
+                    Attributes.Document.PageWidth = Attributes.ActualWidth + 10000;
+                    CurrentCode.Document.PageWidth = CurrentCode.ActualWidth + 10000;
+                    CurrentXPath.Document.PageWidth = CurrentXPath.ActualWidth + 10000;
+                }));
+            });
         }
 
         private void Browser_IsBrowserInitializedChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -698,7 +714,8 @@ namespace CustomCrawler
                         before = $"ccw_tag=ccw_{i}_{j}";
                         before_border = instance.browser.EvaluateScriptAsync($"document.querySelector('[{before}]').style.border").Result.Result.ToString();
                         instance.browser.EvaluateScriptAsync($"document.querySelector('[{before}]').style.border = '0.2em solid red';").Wait();
-                        instance.CurrentXPath.Text = selected_node.XPath;
+                        instance.CurrentXPath.Document.Blocks.Clear();
+                        instance.CurrentXPath.Document.Blocks.Add(new Paragraph(new Run(selected_node.XPath)));
 
                         var builder = new StringBuilder();
                         builder.Append("public HtmlNode Extract(string html)\r\n");
@@ -708,19 +725,24 @@ namespace CustomCrawler
                         builder.Append($"    return document.DocumentNode.SelectSingleNode(\"{selected_node.XPath}\");\r\n");
                         builder.Append("}\r\n");
 
-                        instance.CurrentCode.Text = builder.ToString();
+                        instance.CurrentCode.Document.Blocks.Clear();
+                        instance.CurrentCode.Document.Blocks.Add(new Paragraph(new Run(builder.ToString())));
 
                         builder.Clear();
                         var cf = new Func<string, string>((x) =>
                         {
-                            if (x == "origin_onmouseenter") return "onmouseetner";
+                            if (x == "origin_onmouseenter") return "onmouseenter";
                             if (x == "origin_onmouseleave") return "onmouseleave";
                             return x;
                         });
                         selected_node.Attributes.Where(x => !new [] { "onmouseenter", "onmouseleave", "ccw_tag" }.Contains(x.Name))
                             .ToList().ForEach(x => builder.Append($"{cf(x.Name)}=\"{x.Value}\"\r\n"));
 
-                        instance.Attributes.Text = builder.ToString();
+                        var xy = instance.gs1;
+
+                        instance.Attributes.Document.Blocks.Clear();
+                        instance.Attributes.Document.Blocks.Add(new Paragraph(new Run(builder.ToString())));
+                        //instance.Attributes.Text = builder.ToString();
                     }
                     catch { }
                 }));
