@@ -2,7 +2,6 @@
 
 `Custom Crawler` is a tool for automatic crawler generation.
 This project is based on `WPF` and requires `.NET Framework 4.7.2` or higher.
-So, this program only runs on `Windows 10`.
 
 한국어 설명(Korean Description): https://github.com/rollrat/custom-crawler/blob/master/CONCEPT.md
 
@@ -176,20 +175,32 @@ If you can't see the function, it may be due to incorrectly adjusted accuracy.
 
 ## 1.3. Diff Tool
 
+![](res/r15.png)
+
 This tool is simple.
 Determine which parts of the two HTML are different.
 
 ## 2. Dynamic Web Analysis
 
+Run the program and click the Dynamics button in the bottom right Sub Tools.
 
+![](res/r14.png)
+
+Enter the URL and press Navigate. When the Build button is activated, press the button.
+
+We just provide two functions for analyzing dynamic web.
 
 ### 2.1. Dynamic DOM Analysis
+
+Place the mouse on the dynamically loaded part and check the hover window.
+You can see where this element was created.
 
 ### 2.2. Find Download(Requested) Data Associated With Dynamic Added Elements
 
 This is where many people spend their time building crawlers.
 If you know which elements are associated with which files, 
 the complexity of dynamic analysis can be greatly reduced.
+This feature is not completely accurate, but it lists very very closely related files.
 
 ### 3. JavaScript Static Analysis
 
