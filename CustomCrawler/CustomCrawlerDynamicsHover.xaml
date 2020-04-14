@@ -1,0 +1,19 @@
+﻿<Window x:Class="CustomCrawler.CustomCrawlerDynamicsHover"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomCrawler"
+        mc:Ignorable="d" ShowInTaskbar="False"
+        Title="Custom Crawler Dynamics - Hover Info" Height="473.326" Width="1067.279">
+    <Grid Margin="8">
+        <RichTextBox x:Name="Info" IsReadOnly="True" Background="White" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <RichTextBox.Resources>
+                <Style TargetType="Hyperlink">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
+    </Grid>
+</Window>

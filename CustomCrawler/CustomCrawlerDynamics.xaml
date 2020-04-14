@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomCrawler"
         mc:Ignorable="d"
-        Title="Custom Crawler Dynamics" Height="485.553" Width="1109.819">
+        Title="Custom Crawler Dynamics" Height="844.028" Width="1400">
     <Grid Margin="8">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -17,15 +18,42 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock FontSize="15" Text="URL: " Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
         <TextBox x:Name="URLText" Grid.Row="0" Grid.Column="1" FontSize="15"/>
-        <Button Grid.Row="0" Grid.Column="2" Content="Navigate" Width="120" Margin="4 0 0 0" Click="Button_Click"/>
+        <Button Grid.Row="0" Grid.Column="2" Content="Navigate" Width="120" Margin="4 0 0 0" Click="Button_Click"  x:Name="Navigate"/>
+        <Button x:Name="Build" IsEnabled="False" Grid.Row="0" Grid.Column="3" Content="Build" Width="120" Margin="4 0 0 0" Click="Button_Click_1"/>
 
-        <Border Grid.Row="1" Grid.ColumnSpan="3" Margin="0 4 0 0" BorderThickness="1" BorderBrush="LightGray">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="4" Margin="0 2 0 0">
+            <TextBlock x:Name="F2" Text="F2: Lock" FontSize="15"/>
+            <TextBlock Text="    " FontSize="15"/>
+            <TextBlock Text="F8: Deep Scan" FontSize="15"/>
+            <TextBlock Text="    " FontSize="15"/>
+            <!--<TextBlock Text="F3: Depth(-)" FontSize="15"/>
+            <TextBlock Text="    " FontSize="15"/>
+            <TextBlock Text="F4: Depth(+)" FontSize="15"/>
+            <TextBlock Text="    " FontSize="15"/>
+            <TextBlock Text="F8: Marking" FontSize="15"/>
+            <TextBlock Text="    " FontSize="15"/>
+            <TextBlock x:Name="Depth" Text="Depth=0" FontSize="15"/>-->
+        </StackPanel>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="4" Margin="0 4 0 0" BorderThickness="1" BorderBrush="LightGray">
             <ContentControl x:Name="browserContainer" Content="Browser goes here" Grid.Row="1"/>
         </Border>
 
+        <!--<GroupBox Grid.RowSpan="3" Grid.Column="4" Margin="4 0 0 0" Width="600" Header="Hover Item Info (Locking: F2)">
+            <RichTextBox Margin="2 4 2 2" x:Name="Info" IsReadOnly="True" Background="White" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <RichTextBox.Resources>
+                    <Style TargetType="Hyperlink">
+                        <Setter Property="Cursor" Value="Hand" />
+                        <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
+                    </Style>
+                </RichTextBox.Resources>
+            </RichTextBox>
+        </GroupBox>-->
     </Grid>
 </Window>

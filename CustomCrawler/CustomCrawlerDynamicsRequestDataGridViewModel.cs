@@ -6,7 +6,7 @@
 
 ***/
 
-using CustomCrawler.chrome_devtools.Event.Network;
+using MasterDevs.ChromeDevTools.Protocol.Chrome.Network;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,8 +27,8 @@ namespace CustomCrawler
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public RequestWillBeSent Request { get; set; }
-        public ResponseReceived Response { get; set; }
+        public RequestWillBeSentEvent Request { get; set; }
+        public ResponseReceivedEvent Response { get; set; }
 
         private string _index;
         public string Id

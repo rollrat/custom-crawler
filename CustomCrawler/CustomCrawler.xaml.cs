@@ -36,7 +36,8 @@ namespace CustomCrawler
             InitializeComponent();
 
             CefSettings set = new CefSettings();
-            ChromeDevtoolsEnvironment.Settings(ref set);
+            //ChromeDevtoolsEnvironment.Settings(ref set);
+            ChromeDevTools.Settings(ref set);
             set.RegisterScheme(new CefCustomScheme()
             {
                 SchemeName = "http",
@@ -56,7 +57,7 @@ namespace CustomCrawler
         {
             public IResourceHandler Create(IBrowser browser, IFrame frame, string schemeName, IRequest request)
             {
-                if (request.Url.EndsWith(".js") && !JsManager.Instance.Contains(request.Url))
+                if (request.Url.Split('?')[0].EndsWith(".js") && !JsManager.Instance.Contains(request.Url))
                 {
                     try
                     {
@@ -505,7 +506,8 @@ namespace CustomCrawler
 
         private void Dynamics_Click(object sender, RoutedEventArgs e)
         {
-            new CustomCrawlerDynamics().Show();
+            if (CustomCrawlerDynamics.opened == false)
+                new CustomCrawlerDynamics().Show();
         }
     }
 }

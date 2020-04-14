@@ -7,12 +7,6 @@
 ***/
 
 using CefSharp.Wpf;
-using CustomCrawler.chrome_devtools.Event;
-using CustomCrawler.chrome_devtools.Event.Debugger;
-using CustomCrawler.chrome_devtools.Event.DOM;
-using CustomCrawler.chrome_devtools.Event.Network;
-using CustomCrawler.chrome_devtools.Method.Debugger;
-using CustomCrawler.chrome_devtools.Method.DOMDebugger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;

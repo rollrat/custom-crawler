@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Custom Crawler" Height="692" Width="1497">
+        Title="Custom Crawler - Custom Copy Project" Height="692" Width="1497">
 
     <Grid Margin="8">
         <Grid.RowDefinitions>
