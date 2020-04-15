@@ -23,7 +23,6 @@ This program only runs on `Windows 10`.
    - [2.3. Deep Scan](#23-deep-scan)
  - [3. JavaScript Static Analysis](#3-javascript-static-analysis)
  - [4. Crawler Generator](#4-crawler-generator)
- - [For Contributors...](#for-contributors)
  - [Libraries](#libraries)
 
 ## Download
@@ -217,11 +216,6 @@ It will also be integrated with JavaScript static analysis tools in the future.
 This feature is currently being implemented.
 
 ### 4. Crawler Generator
-
-## For Contributors...
-
-Most importantly, it should be easy to use, secondly performance, 
-and thirdly how good this feature is. Design is a problem after that.
 
 ## Libraries
 
