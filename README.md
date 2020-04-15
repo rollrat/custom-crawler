@@ -2,6 +2,7 @@
 
 `Custom Crawler` is a tool for automatic crawler generation.
 This project is based on `WPF` and requires `.NET Framework 4.7.2` or higher.
+This program only runs on `Windows 10`.
 
 한국어 설명(Korean Description): https://github.com/rollrat/custom-crawler/blob/master/CONCEPT.md
 
