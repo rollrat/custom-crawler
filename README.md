@@ -20,6 +20,7 @@ This program only runs on `Windows 10`.
  - [2. Dynamic Web Analysis](#2dynamic-web-analysis)
    - [2.1. Dynamic DOM Analysis](#21-dynamic-dom-analysis)
    - [2.2. Find Download(Requested) Data Associated With Dynamic Added Elements](#22-find-downloadrequested-data-associated-with-dynamic-added-elements)
+   - [2.3. Deep Scan](#23-deep-scan)
  - [3. JavaScript Static Analysis](#3-javascript-static-analysis)
  - [For Contributors...](#for-contributors)
  - [Libraries](#libraries)
@@ -202,6 +203,13 @@ This is where many people spend their time building crawlers.
 If you know which elements are associated with which files, 
 the complexity of dynamic analysis can be greatly reduced.
 This feature is not completely accurate, but it lists very very closely related files.
+
+### 2.3. Deep Scan
+
+This feature is currently being implemented.
+
+It can be used to analyze such very complex dynamic elements that have a huge amount of computation(ex. Youtube Player ..).
+It will also be integrated with JavaScript static analysis tools in the future.
 
 ### 3. JavaScript Static Analysis
 
