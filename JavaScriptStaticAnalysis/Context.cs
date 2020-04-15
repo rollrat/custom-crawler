@@ -22,5 +22,22 @@ namespace JavaScriptStaticAnalysis
             cc.script = parser.ParseScript(true);
             return cc;
         }
+
+        /// <summary>
+        /// Check References for Sepecific Node
+        /// 
+        /// If you enter `d` node in the following code,
+        /// a = 30;
+        /// a = 10;
+        /// b = 20;
+        /// d = a + b;
+        /// then returns the nodes that were last used with values a and b needed to compute d.
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        private void check_reference(INode node)
+        {
+
+        }
     }
 }
