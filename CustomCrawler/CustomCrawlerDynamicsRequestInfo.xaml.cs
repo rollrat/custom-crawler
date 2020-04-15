@@ -53,6 +53,12 @@ namespace CustomCrawler
 
             string body;
 
+            if (result.Result == null)
+            {
+                Info.Text = "An unknown error :(";
+                return;
+            }
+
             if (result.Result.Base64Encoded)
                 result.Result.Body.TryParseBase64(out body);
             else
