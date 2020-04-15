@@ -254,8 +254,23 @@ namespace CustomCrawler
 
             var doc = await ss.SendAsync(new GetDocumentCommand { Depth = -1 });
 
-            stacks = new Dictionary<string, StackTrace>();
-            await find_source(doc.Result.Root);
+            if (doc.Result != null)
+            {
+                stacks = new Dictionary<string, StackTrace>();
+                await find_source(doc.Result.Root);
+
+            }
+            else
+            {
+                await Application.Current.Dispatcher.BeginInvoke(new Action(
+                delegate
+                {
+                    MessageBox.Show("Please try again later! " +
+                        "If this error persists, restart the program. " +
+                        "If that continues, please open new issue to https://github.com/rollrat/custom-crawler.", 
+                        "Custom Craweler", MessageBoxButton.OK, MessageBoxImage.Error);
+                }));
+            }
 
             await Application.Current.Dispatcher.BeginInvoke(new Action(
             delegate
