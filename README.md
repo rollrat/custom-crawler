@@ -9,6 +9,7 @@ This program only runs on `Windows 10`.
 ## Menu
 
  - [Download](#download)
+ - [Documents](#documents)
  - [0. Before Introducing This Tool...](#0-before-introducing-this-tool)
  - [1. Static Web Analysis](#1-static-web-analysis)
    - [1.1. Tag Information Extraction](#11-tag-information-extraction)
@@ -28,6 +29,10 @@ This program only runs on `Windows 10`.
 ## Download
 
 Latest Version: https://github.com/rollrat/custom-crawler/releases/download/2020.04.14/custom-crawler-2020.04.14.zip
+
+## Documents
+
+[About JavaScript Static Analysis](Documents/JavaScriptAnalysis.md)
 
 ## 0. Before Introducing This Tool...
 
