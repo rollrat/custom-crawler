@@ -253,8 +253,6 @@ namespace JavaScriptStaticAnalysis.IR
         private Stack<Block> stmt_cont = new Stack<Block>();
         private Stack<Block> stmt_exit = new Stack<Block>();
 
-        private Stack<Block> latest_block = new Stack<Block>();
-
         /// <summary>
         /// Assuming you have the following example
         /// 
@@ -293,13 +291,15 @@ namespace JavaScriptStaticAnalysis.IR
         private Block visit_block(Block bb)
         {
             var cur = bb;
-            var once_created = false;
-
-            latest_block.Push(cur);
 
             foreach (var node in bb.Node.ChildNodes)
             {
                 var v = visit(node);
+
+                if (v == null)
+                    continue;
+
+                v.Parent = bb;
 
                 if (v is Block)
                 {
@@ -309,20 +309,10 @@ namespace JavaScriptStaticAnalysis.IR
                     // it is associated with the parent node.
                     cur = new Block(null);
                     bb.ChildBlocks.Add(cur);
-
-                    if (once_created)
-                        latest_block.Pop();
-                    latest_block.Push(cur);
-
-                    once_created = true;
                 }
-                else if (v != null)
+                else
                     cur.Childs.Add(v);
             }
-
-            if (once_created)
-                latest_block.Pop();
-            latest_block.Pop();
 
             return bb;
         }
@@ -364,24 +354,28 @@ namespace JavaScriptStaticAnalysis.IR
                 /// 
                 case Nodes.BreakStatement:
                     {
+                        var result = new Block(stmt);
                         var bs = stmt as BreakStatement;
 
                         if (string.IsNullOrEmpty(bs.Label.Name))
-                            latest_block.Peek().ChildBlocks.Add(stmt_exit.Peek());
+                            result.ChildBlocks.Add(stmt_exit.Peek());
                         else
-                            latest_block.Peek().ChildBlocks.Add(labeled_exit[bs.Label.Name]);
+                            result.ChildBlocks.Add(labeled_exit[bs.Label.Name]);
+
+                        return result;
                     }
-                    break;
                 case Nodes.ContinueStatement:
                     {
+                        var result = new Block(stmt);
                         var bs = stmt as ContinueStatement;
 
                         if (string.IsNullOrEmpty(bs.Label.Name))
-                            latest_block.Peek().ChildBlocks.Add(stmt_cont.Peek());
+                            result.ChildBlocks.Add(stmt_exit.Peek());
                         else
-                            latest_block.Peek().ChildBlocks.Add(labeled_cont[bs.Label.Name]);
+                            result.ChildBlocks.Add(labeled_exit[bs.Label.Name]);
+
+                        return result;
                     }
-                    break;
 
                 // case Nodes.DebuggerStatement: // Nothing
 
@@ -390,11 +384,11 @@ namespace JavaScriptStaticAnalysis.IR
                         var result = new Block(stmt);
                         var dws = stmt as DoWhileStatement;
 
-                        var i1 = new Block(null); // Test Block
+                        var i1 = new Block(null) { Parent = result }; // Test Block
                         i1.Childs.Add(visitOnExpression(dws.Test));
 
-                        var i2 = new Block(null); // Body Block
-                        var i3 = new Block(null); // Exit Block
+                        var i2 = new Block(null) { Parent = result }; // Body Block
+                        var i3 = new Block(null) { Parent = result }; // Exit Block
 
                         result.ChildBlocks.Add(i2);
 
@@ -414,7 +408,7 @@ namespace JavaScriptStaticAnalysis.IR
                         return result;
                     }
 
-                case Nodes.EmptyStatement:
+                // case Nodes.EmptyStatement: // Nothing
                 case Nodes.ExpressionStatement:
                 case Nodes.ForInStatement:
                 case Nodes.ForOfStatement:

@@ -13,6 +13,7 @@ namespace JavaScriptStaticAnalysis.IR
     public abstract class IRComponent
     {
         public INode Node { get; set; }
+        public IRComponent Parent { get; set; }
 
         public IRComponent(INode node)
         {
