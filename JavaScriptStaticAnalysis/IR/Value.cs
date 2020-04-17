@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 
 namespace JavaScriptStaticAnalysis.IR
 {
-    public abstract class IRComponent
+    public class Value : IRComponent
     {
-        INode node;
+        public List<Value> Uses { get; set; }
 
-        public IRComponent(INode node)
+        public Value(INode node)
+            : base(node)
         {
-            this.node = node;
+            Uses = new List<Value>();
         }
     }
 }

@@ -13,16 +13,16 @@ namespace JavaScriptStaticAnalysis.IR
     /// <summary>
     /// Contains about named functions, anonymous functions, and lambda functions.
     /// </summary>
-    public class Function : IRComponent
+    public class Function : Value
     {
+        public List<Value> Arguments { get; set; }
+        public List<Block> Blocks { get; set; }
+
         public Function(INode node)
             : base(node)
         {
-        }
-
-        public override string Rewrite()
-        {
-            throw new NotImplementedException();
+            Arguments = new List<Value>();
+            Blocks = new List<Block>();
         }
     }
 }

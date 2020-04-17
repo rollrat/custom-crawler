@@ -13,13 +13,13 @@ namespace JavaScriptStaticAnalysis
 {
     public class Context
     {
-        Script script;
+        public Script Script { get; set; }
 
         public static Context CreateInstance(string js)
         {
             var cc = new Context();
             var parser = new JavaScriptParser(js, new ParserOptions { Loc = true });
-            cc.script = parser.ParseScript(true);
+            cc.Script = parser.ParseScript(true);
             return cc;
         }
 

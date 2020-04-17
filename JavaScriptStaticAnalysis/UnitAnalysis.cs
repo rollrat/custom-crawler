@@ -2,6 +2,7 @@
 // Copyright (C) 2020. rollrat. Licensed under the MIT Licence.
 
 using Esprima.Ast;
+using JavaScriptStaticAnalysis.IR;
 using System;
 using System.Collections.Generic;
 using System.Linq;

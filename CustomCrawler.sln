@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeDevTools", "ChromeDev
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScriptStaticAnalysis", "JavaScriptStaticAnalysis\JavaScriptStaticAnalysis.csproj", "{02412A2A-4C78-48F0-BB0D-C10C4F0BAC91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScriptStaticAnalysisTest", "JavaScriptStaticAnalysisTest\JavaScriptStaticAnalysisTest.csproj", "{C05675C7-4498-4B78-95C7-C7A9B730AC3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{02412A2A-4C78-48F0-BB0D-C10C4F0BAC91}.Release|x64.Build.0 = Release|Any CPU
 		{02412A2A-4C78-48F0-BB0D-C10C4F0BAC91}.Release|x86.ActiveCfg = Release|Any CPU
 		{02412A2A-4C78-48F0-BB0D-C10C4F0BAC91}.Release|x86.Build.0 = Release|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Debug|x64.Build.0 = Debug|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Debug|x86.Build.0 = Debug|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|x64.ActiveCfg = Release|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|x64.Build.0 = Release|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|x86.ActiveCfg = Release|Any CPU
+		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
