@@ -12,11 +12,11 @@ namespace JavaScriptStaticAnalysis.IR
 {
     public abstract class IRComponent
     {
-        INode node;
+        public INode Node { get; set; }
 
         public IRComponent(INode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }

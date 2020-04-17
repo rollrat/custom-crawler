@@ -13,6 +13,7 @@ namespace JavaScriptStaticAnalysis.IR
     public class Block : IRComponent
     {
         public List<Block> ChildBlocks { get; set; }
+        public List<IRComponent> Childs { get; set; }
 
         public Block(INode node)
             : base(node)
