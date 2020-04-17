@@ -15,6 +15,8 @@ namespace JavaScriptStaticAnalysis.IR
     /// </summary>
     public class IRBuilder
     {
+        Block entry_point;
+
         public IRBuilder(Script script)
         {
             visit(script.ChildNodes.First());
@@ -127,125 +129,90 @@ namespace JavaScriptStaticAnalysis.IR
 
         private void visit(INode node)
         {
-            switch (node.GetType().Name)
+            switch (node.Type)
             {
                     // Expressions
-                case "ArrayExpression":
-                case "ArrowFunctionExpression":
-                case "AssignmentExpression":
-                case "AwaitExpression":
-                case "BinaryExpression":
-                case "CallExpression":
-                case "ClassExpression":
-                case "ComputedMemberExpression":
-                case "ConditionalExpression":
-                case "FunctionExpression":
-                case "MemberExpression":
-                case "NewExpression":
-                case "ObjectExpression":
-                case "SequenceExpression":
-                case "StaticMemberExpression":
-                case "TaggedTemplateExpression":
-                case "ThisExpression":
-                case "UnaryExpression":
-                case "UpdateExpression":
-                case "YieldExpression":
+                case Nodes.ArrayExpression:
+                case Nodes.ArrowFunctionExpression:
+                case Nodes.AssignmentExpression:
+                case Nodes.AwaitExpression:
+                case Nodes.BinaryExpression:
+                case Nodes.CallExpression:
+                case Nodes.ClassExpression:
+                case Nodes.ConditionalExpression:
+                case Nodes.LogicalExpression:
+                case Nodes.FunctionExpression:
+                case Nodes.MemberExpression:
+                case Nodes.NewExpression:
+                case Nodes.ObjectExpression:
+                case Nodes.SequenceExpression:
+                case Nodes.TaggedTemplateExpression:
+                case Nodes.ThisExpression:
+                case Nodes.UnaryExpression:
+                case Nodes.UpdateExpression:
+                case Nodes.YieldExpression:
                     break;
 
                     // Statements
-                case "BlockStatement":
-                case "BreakStatement":
-                case "ContinueStatement":
-                case "DebuggerStatement":
-                case "DoWhileStatement":
-                case "EmptyStatement":
-                case "ExpressionStatement":
-                case "ForInStatement":
-                case "ForOfStatement":
-                case "ForStatement":
-                case "IfStatement":
-                case "LabeledStatement":
-                case "ReturnStatement":
-                case "SwitchStatement":
-                case "ThrowStatement":
-                case "TryStatement":
-                case "WhileStatement":
-                case "WithStatement":
+                case Nodes.BlockStatement:
+                case Nodes.BreakStatement:
+                case Nodes.ContinueStatement:
+                case Nodes.DebuggerStatement:
+                case Nodes.DoWhileStatement:
+                case Nodes.EmptyStatement:
+                case Nodes.ExpressionStatement:
+                case Nodes.ForInStatement:
+                case Nodes.ForOfStatement:
+                case Nodes.ForStatement:
+                case Nodes.IfStatement:
+                case Nodes.LabeledStatement:
+                case Nodes.ReturnStatement:
+                case Nodes.SwitchStatement:
+                case Nodes.ThrowStatement:
+                case Nodes.TryStatement:
+                case Nodes.WhileStatement:
+                case Nodes.WithStatement:
                     break;
 
                     // Declaration
-                case "ClassDeclaration":
-                case "ExportAllDeclaration":
-                case "ExportDeclaration":
-                case "ExportDefaultDeclaration":
-                case "ExportNamedDeclaration":
-                case "FunctionDeclaration":
-                case "IDeclaration":
-                case "IFunctionDeclaration":
-                case "ImportDeclaration":
-                case "VariableDeclaration":
+                case Nodes.ClassDeclaration:
+                case Nodes.ExportAllDeclaration:
+                case Nodes.ExportDefaultDeclaration:
+                case Nodes.ExportNamedDeclaration:
+                case Nodes.FunctionDeclaration:
+                case Nodes.ImportDeclaration:
+                case Nodes.VariableDeclaration:
 
-                    // Operator
-                case "AssignmentOperator":
-                case "BinaryOperator":
-                case "UnaryOperator":
-                    break;
+                    // Specifier
+                case Nodes.ExportSpecifier:
+                case Nodes.ImportDefaultSpecifier:
+                case Nodes.ImportNamespaceSpecifier:
+                case Nodes.ImportSpecifier:
 
-                    // Interfaces or Abstract
-                case "ArgumentListElement":
-                case "ArrayExpressionElement":
-                case "BindingIdentifier":
-                case "BindingPattern":
-                case "ExportSpecifier":
-                case "Expression":
-                case "IArrayPatternElement":
-                case "IFunction":
-                case "IFunctionParameter":
-                case "ImportDeclarationSpecifier":
-                case "INode":
-                case "IStatementListItem":
-                case "ObjectExpressionProperty":
-                case "ObjectPatternProperty":
-                case "Program":
-                case "PropertyValue":
-                case "Statement":
+                // Interfaces or Abstract
+                case Nodes.Program:
                     break;
 
                     // Others
-                case "ArrayPattern":
-                case "ArrowParameterPlaceHolder":
-                case "AssignmentPattern":
-                case "CatchClause":
-                case "ClassBody":
-                case "ClassProperty":
-                case "Directive":
-                case "Identifier":
-                case "Import":
-                case "ImportDefaultSpecifier":
-                case "ImportNamespaceSpecifier":
-                case "ImportSpecifier":
-                case "Literal":
-                case "MetaProperty":
-                case "MethodDefinition":
-                case "Module":
-                case "Node":
-                case "NodeExtensions":
-                case "NodeList":
-                case "Nodes":
-                case "ObjectPattern":
-                case "Property":
-                case "PropertyKind":
-                case "Range":
-                case "RegexValue":
-                case "RestElement":
-                case "Script":
-                case "SpreadElement":
-                case "Super":
-                case "SwitchCase":
-                case "TemplateElement":
-                case "TemplateLiteral":
-                case "VariableDeclarationKind":
-                case "VariableDeclarator":
+                case Nodes.ArrayPattern:
+                case Nodes.ArrowParameterPlaceHolder:
+                case Nodes.AssignmentPattern:
+                case Nodes.CatchClause:
+                case Nodes.ClassBody:
+                case Nodes.Identifier:
+                case Nodes.Import:
+                case Nodes.Literal:
+                case Nodes.MetaProperty:
+                case Nodes.MethodDefinition:
+                case Nodes.ObjectPattern:
+                case Nodes.Property:
+                case Nodes.RestElement:
+                case Nodes.SpreadElement:
+                case Nodes.Super:
+                case Nodes.SwitchCase:
+                case Nodes.TemplateElement:
+                case Nodes.TemplateLiteral:
+                case Nodes.VariableDeclarator:
                     break;
             }
         }
