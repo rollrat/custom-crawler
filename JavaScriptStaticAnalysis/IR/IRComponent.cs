@@ -14,10 +14,12 @@ namespace JavaScriptStaticAnalysis.IR
     {
         public INode Node { get; set; }
         public IRComponent Parent { get; set; }
+        public List<IRComponent> Parents { get; set; }
 
         public IRComponent(INode node)
         {
-            this.Node = node;
+            Node = node;
+            Parents = new List<IRComponent>();
         }
     }
 }

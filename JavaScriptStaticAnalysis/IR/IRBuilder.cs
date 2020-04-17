@@ -252,6 +252,8 @@ namespace JavaScriptStaticAnalysis.IR
         private Dictionary<string, Block> labeled_exit = new Dictionary<string, Block>();
         private Stack<Block> stmt_cont = new Stack<Block>();
         private Stack<Block> stmt_exit = new Stack<Block>();
+        private Stack<Block> func_exit = new Stack<Block>();
+        private Stack<Block>  try_exit = new Stack<Block>();
 
         /// <summary>
         /// Assuming you have the following example
@@ -288,11 +290,11 @@ namespace JavaScriptStaticAnalysis.IR
         /// </summary>
         /// <param name="stmt"></param>
         /// <returns></returns>
-        private Block visit_block(Block bb)
+        private Block visit_block(Block bb, Statement body)
         {
             var cur = bb;
 
-            foreach (var node in bb.Node.ChildNodes)
+            foreach (var node in body.ChildNodes)
             {
                 var v = visit(node);
 
@@ -319,13 +321,12 @@ namespace JavaScriptStaticAnalysis.IR
 
         private IRComponent visitOnStatement(Statement stmt)
         {
-
             switch (stmt.Type)
             {
                 case Nodes.BlockStatement:
                     {
                         var result = new Block(stmt);
-                        return visit_block(result);
+                        return visit_block(result, stmt);
                     }
 
                 /// There are several elements to handle.
@@ -384,7 +385,7 @@ namespace JavaScriptStaticAnalysis.IR
                         var result = new Block(stmt);
                         var dws = stmt as DoWhileStatement;
 
-                        var i1 = new Block(null) { Parent = result }; // Test Block
+                        var i1 = new Block(dws.Test) { Parent = result, IsConditional = true }; // Test Block
                         i1.Childs.Add(visitOnExpression(dws.Test));
 
                         var i2 = new Block(null) { Parent = result }; // Body Block
@@ -395,36 +396,275 @@ namespace JavaScriptStaticAnalysis.IR
                         i1.ChildBlocks.Add(i2);
                         i1.ChildBlocks.Add(i3);
 
-                        i2.ChildBlocks.Add(i1);
-
                         stmt_cont.Push(i2);
                         stmt_exit.Push(i3);
 
-                        visit_block(result);
+                        visit_block(i2, dws.Body);
 
                         stmt_cont.Pop();
                         stmt_exit.Pop();
+
+                        i2.ChildBlocks.Add(i1);
 
                         return result;
                     }
 
                 // case Nodes.EmptyStatement: // Nothing
+
                 case Nodes.ExpressionStatement:
+                    {
+                        var expr = stmt as ExpressionStatement;
+                        return new Expr(stmt) { Value = visitOnExpression(expr.Expression) };
+                    }
+
                 case Nodes.ForInStatement:
+                    {
+                        var result = new Block(stmt);
+                        var fis = stmt as ForInStatement;
+
+                        var i1 = new Block(null) { Parent = result }; // Next Block
+                        var i2 = new Block(null) { Parent = result }; // Body Block
+                        var i3 = new Block(null) { Parent = result }; // Exit Block
+
+                        result.ChildBlocks.Add(i1);
+
+                        i1.ChildBlocks.Add(i2);
+                        i1.ChildBlocks.Add(i3);
+
+                        stmt_cont.Push(i1);
+                        stmt_exit.Push(i3);
+
+                        visit_block(i2, fis.Body);
+
+                        stmt_cont.Pop();
+                        stmt_exit.Pop();
+
+                        i2.ChildBlocks.Add(i1);
+
+                        return result;
+                    }
+
                 case Nodes.ForOfStatement:
+                    {
+                        var result = new Block(stmt);
+                        var fis = stmt as ForOfStatement;
+
+                        var i1 = new Block(null) { Parent = result }; // Next Block
+                        var i2 = new Block(null) { Parent = result }; // Body Block
+                        var i3 = new Block(null) { Parent = result }; // Exit Block
+
+                        result.ChildBlocks.Add(i1);
+
+                        i1.ChildBlocks.Add(i2);
+                        i1.ChildBlocks.Add(i3);
+
+                        stmt_cont.Push(i1);
+                        stmt_exit.Push(i3);
+
+                        visit_block(i2, fis.Body);
+
+                        stmt_cont.Pop();
+                        stmt_exit.Pop();
+
+                        i2.ChildBlocks.Add(i1);
+
+                        return result;
+                    }
+
                 case Nodes.ForStatement:
+                    {
+                        var result = new Block(stmt);
+                        var fs = stmt as ForStatement;
+
+                        var i0 = new Block(fs.Init) { Parent = result }; // Init Block
+                        i0.Childs.Add(visit(fs.Init));
+
+                        var i1 = new Block(fs.Test) { Parent = result, IsConditional = true }; // Test Block
+                        i1.Childs.Add(visitOnExpression(fs.Test));
+                        i0.ChildBlocks.Add(i1);
+
+                        var i2 = new Block(fs.Update) { Parent = result }; // Update Block
+                        i2.Childs.Add(visitOnExpression(fs.Update));
+                        i2.ChildBlocks.Add(i1);
+
+                        var i3 = new Block(null) { Parent = result }; // Body Block
+                        var i4 = new Block(null) { Parent = result }; // Exit Block
+                        i1.ChildBlocks.Add(i3);
+                        i1.ChildBlocks.Add(i4);
+
+                        result.ChildBlocks.Add(i0);
+
+                        stmt_cont.Push(i2);
+                        stmt_exit.Push(i4);
+
+                        visit_block(i3, fs.Body);
+
+                        stmt_cont.Pop();
+                        stmt_exit.Pop();
+
+                        i3.ChildBlocks.Add(i2);
+
+                        return result;
+                    }
+
                 case Nodes.IfStatement:
+                    {
+                        var result = new Block(stmt);
+                        var ifs = stmt as IfStatement;
+
+                        var i0 = new Block(ifs.Test) { Parent = result, IsConditional = true }; // Test Block
+                        var i1 = new Block(null) { Parent = result }; // If Block
+                        var i2 = new Block(null) { Parent = result }; // Else Block
+                        var i3 = new Block(null) { Parent = result }; // Exit Block
+
+                        i0.ChildBlocks.Add(i1);
+                        i0.ChildBlocks.Add(i2);
+
+                        i0.Childs.Add(visitOnExpression(ifs.Test));
+
+                        result.ChildBlocks.Add(result);
+
+                        visit_block(i1, ifs.Consequent);
+                        visit_block(i2, ifs.Alternate);
+
+                        i1.ChildBlocks.Add(i3);
+                        i2.ChildBlocks.Add(i3);
+
+                        return result;
+                    }
+
                 case Nodes.LabeledStatement:
+                    {
+                        var result = new Block(stmt);
+                        var ls = stmt as LabeledStatement;
+
+                        var i1 = new Block(null) { Parent = result }; // Enter Block
+                        var i2 = new Block(null) { Parent = result }; // Exit Block
+
+                        result.ChildBlocks.Add(i1);
+
+                        labeled_cont.Add(ls.Label.Name, i1);
+                        labeled_exit.Add(ls.Label.Name, i2);
+
+                        visit_block(i1, ls.Body);
+
+                        labeled_cont.Remove(ls.Label.Name);
+                        labeled_exit.Remove(ls.Label.Name);
+
+                        i1.ChildBlocks.Add(i2);
+
+                        return result;
+                    }
+
                 case Nodes.ReturnStatement:
+                    {
+                        var result = new Block(stmt);
+                        var rs = stmt as ReturnStatement;
+
+                        result.Childs.Add(visitOnExpression(rs.Argument));
+                        result.ChildBlocks.Add(func_exit.Peek());
+
+                        return result;
+                    }
+
                 case Nodes.SwitchStatement:
+                    {
+                        var result = new Block(stmt);
+                        var ss = stmt as SwitchStatement;
+
+                        var i0 = new Block(ss.Discriminant) { Parent = result, IsConditional = true }; // Test Block
+                        i0.Childs.Add(visitOnExpression(ss.Discriminant));
+
+                        result.Childs.Add(i0);
+
+                        foreach (var sc in ss.Cases)
+                        {
+                            var i1 = new Block(sc.Test) { Parent = result, IsConditional = true };
+                            i1.Childs.Add(visitOnExpression(sc.Test));
+                            foreach (var li in sc.Consequent)
+                                i1.Childs.Add(visit(li));
+                            i0.ChildBlocks.Add(i1);
+                        }
+
+                        return result;
+                    }
+
                 case Nodes.ThrowStatement:
+                    {
+                        var result = new Block(stmt);
+                        var ts = stmt as ThrowStatement;
+
+                        result.Childs.Add(visitOnExpression(ts.Argument));
+                        result.ChildBlocks.Add(try_exit.Peek());
+
+                        return result;
+                    }
+
                 case Nodes.TryStatement:
+                    {
+                        var result = new Block(stmt);
+                        var ts = stmt as TryStatement;
+
+                        var i1 = new Block(null) { Parent = result }; // Try Block
+                        var i2 = new Block(ts.Handler) { Parent = result }; // Catch Block
+                        var i3 = new Block(null) { Parent = result }; // Finalize Block
+                        var i4 = new Block(null) { Parent = result }; // Exit Block
+
+                        i1.ChildBlocks.Add(i3);
+                        i2.ChildBlocks.Add(i3);
+                        i3.ChildBlocks.Add(i4);
+
+                        visit_block(i1, ts.Block);
+                        visit_block(i2, ts.Handler.Body);
+                        visit_block(i3, ts.Finalizer);
+
+                        return result;
+                    }
+
                 case Nodes.WhileStatement:
+                    {
+                        var result = new Block(stmt);
+                        var ws = stmt as WhileStatement;
+
+                        var i1 = new Block(ws.Test) { Parent = result, IsConditional = true }; // Test Block
+                        i1.Childs.Add(visitOnExpression(ws.Test));
+
+                        var i2 = new Block(null) { Parent = result }; // Body Block
+                        var i3 = new Block(null) { Parent = result }; // Exit Block
+
+                        result.ChildBlocks.Add(i1);
+
+                        i1.ChildBlocks.Add(i2);
+                        i1.ChildBlocks.Add(i3);
+
+                        stmt_cont.Push(i2);
+                        stmt_exit.Push(i3);
+
+                        visit_block(result, ws.Body);
+
+                        stmt_cont.Pop();
+                        stmt_exit.Pop();
+
+                        i2.ChildBlocks.Add(i1);
+
+                        return result;
+                    }
+
                 case Nodes.WithStatement:
-                    break;
+                    {
+                        var result = new Block(stmt);
+                        var ws = stmt as WithStatement;
+
+                        result.Childs.Add(visitOnExpression(ws.Object));
+
+                        visit_block(result, ws.Body);
+
+                        return result;
+                    }
             }
 
-            return null;
+            // never triggered.
+            throw new InvalidOperationException();
         }
 
         private Value visitOnDeclaration(IDeclaration decl)

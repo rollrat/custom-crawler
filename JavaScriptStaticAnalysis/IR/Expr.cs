@@ -10,17 +10,12 @@ using System.Threading.Tasks;
 
 namespace JavaScriptStaticAnalysis.IR
 {
-    public class Block : IRComponent
+    public class Expr : IRComponent
     {
-        public List<Block> ChildBlocks { get; set; }
-        public List<IRComponent> Childs { get; set; }
-
-        public bool IsConditional { get; set; }
-
-        public Block(INode node)
+        public Value Value { get; set; }
+        public Expr(INode node)
             : base(node)
         {
-            ChildBlocks = new List<Block>();
         }
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="Context.cs" />
     <Compile Include="IR\Block.cs" />
     <Compile Include="IR\CallExpression.cs" />
+    <Compile Include="IR\Expr.cs" />
     <Compile Include="IR\Function.cs" />
     <Compile Include="IR\IRBuilder.cs" />
     <Compile Include="IR\IRComponent.cs" />
