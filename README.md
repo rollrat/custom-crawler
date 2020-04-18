@@ -225,12 +225,14 @@ This feature is currently being implemented.
 ## Libraries
 
 ```
+AvalonEdit: http://www.avalonedit.net/
 CefSharp: https://github.com/cefsharp/CefSharp
 ChromeDevTools: Origin https://github.com/MasterDevs/ChromeDevTools
                 Fork   https://github.com/KevReed/ChromeDevTools
 Costura: https://github.com/Fody/Costura
 Esprima: https://github.com/sebastienros/esprima-dotnet
 HtmlAgilityPack: https://html-agility-pack.net/
+Jsbeautifier: https://github.com/denis-ivanov/Jsbeautifier
 MaterialDesignThemes: https://github.com/MaterialDesignInXAML/MaterialDesignInXamlTool
 Newtonsoft.Json: https://www.newtonsoft.com/json
 libcef: https://github.com/chromiumembedded/cefkit

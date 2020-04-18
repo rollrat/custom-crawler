@@ -93,7 +93,8 @@ namespace CustomCrawler
                             if (!string.IsNullOrEmpty(frame.Url))
                             {
                                 var hy1 = new Hyperlink();
-                                hy1.NavigateUri = new Uri(frame.Url);
+                                //hy1.NavigateUri = new Uri(frame.Url);
+                                hy1.DataContext = (frame.Url, frame.LineNumber + 1, frame.ColumnNumber + 1);
                                 hy1.Inlines.Add($"{frame.Url}");
                                 paragraph.Inlines.Add(hy1);
                             }
@@ -141,11 +142,14 @@ namespace CustomCrawler
         private void Hyperlink_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var hyperlink = (Hyperlink)sender;
-            if (hyperlink.DataContext == null)
-                System.Diagnostics.Process.Start(hyperlink.NavigateUri.ToString());
+            if (!(hyperlink.DataContext is int))
+            {
+                var tt = hyperlink.DataContext as (string, long, long)?;
+                new ScriptViewer(tt.Value.Item1, (int)tt.Value.Item2, (int)tt.Value.Item3, true).Show();
+            }
             else
             {
-                var child = new CustomCrawlerDynamicsRequestInfo(parent.requests[(hyperlink.DataContext as int?).Value], 
+                var child = new CustomCrawlerDynamicsRequestInfo(parent.requests[(hyperlink.DataContext as int?).Value],
                     parent.response[parent.requests[(hyperlink.DataContext as int?).Value].RequestId]);
                 child.Show();
                 childs.Add(child);
