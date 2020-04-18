@@ -72,7 +72,7 @@ namespace CustomCrawler
             if (node == null || node.Count() == 0)
                 return;
 
-            var nrr = node.ToList();
+            var nrr = node.Where(x => x != null).ToList();
             var ii = nrr.BinarySearch(new bb(line, column), Comparer<INode>.Create((x, y) =>
             {
                 if (x.Location.Start.Line != y.Location.Start.Line)
