@@ -81,12 +81,16 @@ namespace CustomCrawler
                 s1 = p1.ParseScript(true);
                 s2 = p2.ParseScript(true);
 
-                textEditor.Text = raw;
                 (l, c) = (line, column);
                 this.no_pretty = no_pretty;
+
                 Loaded += ScriptViewer_Loaded;
             }
-            catch { }
+            catch 
+            {
+                Beautify.IsEnabled = false;
+                textEditor.Text = raw;
+            }
         }
 
         private void ScriptViewer_Loaded(object sender, RoutedEventArgs e)
