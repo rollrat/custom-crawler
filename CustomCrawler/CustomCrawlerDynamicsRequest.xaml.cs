@@ -164,9 +164,12 @@ namespace CustomCrawler
 
                 if (request == null && response == null)
                 {
+                    if (item.AnonymouseSource.Url != "")
+                    {
+                        new ScriptViewer(item.AnonymouseSource.Url, (int)item.AnonymouseSource.LineNumber + 1, (int)item.AnonymouseSource.ColumnNumber + 1, true).Show();
+                    }
                     if (item.AnonymouseCode != "")
                     {
-                        new ScriptViewer(item.AnonymouseSource.Url, (int)item.AnonymouseSource.LineNumber + 1, (int)item.AnonymouseSource.ColumnNumber + 1, false).Show();
                         new ScriptViewer(false, item.AnonymouseCode).Show();
                     }
                     return;
