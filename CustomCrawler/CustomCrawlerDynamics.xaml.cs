@@ -82,10 +82,6 @@ namespace CustomCrawler
             {
                 ss.SendAsync<MasterDevs.ChromeDevTools.Protocol.Chrome.Page.ReloadCommand>().Wait();
             }
-            else if (e.Key == Key.F12) // Test
-            {
-                (new CustomCrawlerDynamicsBP(this)).Show();
-            }
         }
 
         private void Browser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)

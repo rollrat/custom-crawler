@@ -114,22 +114,22 @@ namespace CustomCrawler
                 Task.Run(() => parent.add_script_info(x));
                 if (x.Url == "")
                 {
-                    Application.Current.Dispatcher.BeginInvoke(new Action(
-                    delegate
-                    {
-                        var pos = "";
+                    var pos = "";
 
-                        if (x.StackTrace != null)
+                    if (x.StackTrace != null)
+                    {
+                        pos = $"{x.StackTrace.CallFrames[0].Url}:<{x.StackTrace.CallFrames[0].FunctionName}>:{x.StackTrace.CallFrames[0].LineNumber}:{x.StackTrace.CallFrames[0].ColumnNumber}";
+                        Application.Current.Dispatcher.BeginInvoke(new Action(
+                        delegate
                         {
-                            pos = $"{x.StackTrace.CallFrames[0].Url}:<{x.StackTrace.CallFrames[0].FunctionName}>:{x.StackTrace.CallFrames[0].LineNumber}:{x.StackTrace.CallFrames[0].ColumnNumber}";
                             (RequestList.DataContext as CustomCrawlerDynamicsRequestDataGridViewModel).Items.Add(new CustomCrawlerDynamicsRequestDataGridItemViewModel
                             {
                                 Id = (++index_count).ToString(),
                                 Type = "AnonymouseParsed",
                                 Url = pos,
                             });
-                        }
-                    }));
+                        }));
+                    }
                 }
             });
 
