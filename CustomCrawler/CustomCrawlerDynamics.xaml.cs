@@ -72,6 +72,52 @@ namespace CustomCrawler
             hover.Show();
         }
 
+        #region Navigate & New instance
+
+        public static IChromeSession ss;
+        bool init = false;
+        CustomCrawlerDynamicsRequest child;
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (!init)
+            {
+                var token = new Random().Next();
+                browser.LoadHtml(token.ToString());
+                init = true;
+
+                JsManager.Instance.Clear();
+                requests = new List<RequestWillBeSentEvent>();
+                requests_id = new Dictionary<string, RequestWillBeSentEvent>();
+                what_is_near = new Dictionary<string, HashSet<int>>();
+                response = new Dictionary<string, ResponseReceivedEvent>();
+                scripts = new List<MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.ScriptParsedEvent>();
+                ss = await ChromeDevTools.Create();
+                (child = new CustomCrawlerDynamicsRequest(ss, this)).Show();
+
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(
+                delegate
+                {
+                    Navigate.IsEnabled = false;
+                }));
+            }
+
+            browser.Load(URLText.Text);
+        }
+
+        #endregion
+
+        #region Control Events
+
+        private void CustomCrawlerDynamics_Closed(object sender, EventArgs e)
+        {
+            opened = false;
+            ChromeDevTools.Dispose();
+            if (child != null)
+                child.Close();
+            childs.Where(x => x.IsLoaded).ToList().ForEach(x => x.Close());
+            hover.Close();
+        }
+
         private void CustomCrawlerDynamics_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F2)
@@ -95,6 +141,8 @@ namespace CustomCrawler
                 }));
             }
         }
+
+        #endregion
 
         #region Cef Callback
 
@@ -126,13 +174,11 @@ namespace CustomCrawler
             CustomCrawlerDynamics instance;
             string before = "";
             public string before_border = "";
-            string latest_elem = "";
-            public HtmlNode selected_node;
             public CallbackCCW(CustomCrawlerDynamics instance)
             {
                 this.instance = instance;
             }
-            public void hoverelem(string elem, bool adjust = false)
+            public void hoverelem(string elem)
             {
                 if (instance.locking) return;
                 Application.Current.Dispatcher.BeginInvoke(new Action(
@@ -145,10 +191,6 @@ namespace CustomCrawler
 
                     await instance.hover.Update(elem);
                 }));
-            }
-            public void adjust()
-            {
-                hoverelem(latest_elem, true);
             }
         }
 
@@ -167,6 +209,8 @@ namespace CustomCrawler
         }
 
         #endregion
+
+        #region Build for Hover
 
         public Dictionary<string, StackTrace> stacks = new Dictionary<string, StackTrace>();
         private async Task find_source(Node nn)
@@ -211,46 +255,6 @@ namespace CustomCrawler
             }
         }
 
-        private void CustomCrawlerDynamics_Closed(object sender, EventArgs e)
-        {
-            opened = false;
-            ChromeDevTools.Dispose();
-            if (child != null)
-                child.Close();
-            childs.Where(x => x.IsLoaded).ToList().ForEach(x => x.Close());
-            hover.Close();
-        }
-
-        public static IChromeSession ss;
-        bool init = false;
-        CustomCrawlerDynamicsRequest child;
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (!init)
-            {
-                var token = new Random().Next();
-                browser.LoadHtml(token.ToString());
-                init = true;
-
-                JsManager.Instance.Clear();
-                requests = new List<RequestWillBeSentEvent>();
-                requests_id = new Dictionary<string, RequestWillBeSentEvent>();
-                what_is_near = new Dictionary<string, HashSet<int>>();
-                response = new Dictionary<string, ResponseReceivedEvent>();
-                scripts = new List<MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.ScriptParsedEvent>();
-                ss = await ChromeDevTools.Create();
-                (child = new CustomCrawlerDynamicsRequest(ss, this)).Show();
-
-                _ = Application.Current.Dispatcher.BeginInvoke(new Action(
-                delegate
-                {
-                    Navigate.IsEnabled = false;
-                }));
-            }
-
-            browser.Load(URLText.Text);
-        }
-
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
             await Application.Current.Dispatcher.BeginInvoke(new Action(
@@ -285,6 +289,8 @@ namespace CustomCrawler
                 Build.IsEnabled = true;
             }));
         }
+
+        #endregion
 
         // <js filename, requests>
         public List<RequestWillBeSentEvent> requests;
