@@ -7,6 +7,7 @@
 ***/
 
 using MasterDevs.ChromeDevTools.Protocol.Chrome.Network;
+using MasterDevs.ChromeDevTools.Protocol.Chrome.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,6 +30,8 @@ namespace CustomCrawler
 
         public RequestWillBeSentEvent Request { get; set; }
         public ResponseReceivedEvent Response { get; set; }
+        public string AnonymouseCode { get; set; }
+        public CallFrame AnonymouseSource { get; set; }
 
         private string _index;
         public string Id

@@ -190,12 +190,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Analysis\CallTreeManager.cs" />
     <Compile Include="chrome-devtools\ChromeDevTools.cs" />
     <Compile Include="CustomCrawlerDiffDataGridViewModel.cs" />
-    <Compile Include="CustomCrawlerDynamicsBP.xaml.cs">
-      <DependentUpon>CustomCrawlerDynamicsBP.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CustomCrawlerDynamicsDeepScan.xaml.cs">
       <DependentUpon>CustomCrawlerDynamicsDeepScan.xaml</DependentUpon>
     </Compile>
@@ -236,10 +232,6 @@
     <Page Include="CustomCrawlerDynamics.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="CustomCrawlerDynamicsBP.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CustomCrawlerDynamicsDeepScan.xaml">
       <SubType>Designer</SubType>

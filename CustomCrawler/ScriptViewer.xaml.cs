@@ -60,7 +60,7 @@ namespace CustomCrawler
         bool no_pretty = true;
         string raw;
         string pretty;
-        public ScriptViewer(string js_url, int line = -1, int column = -1, bool no_pretty = false)
+        void init_with_code(string js_code, int line, int column, bool no_pretty)
         {
             inits();
             InitializeComponent();
@@ -70,8 +70,8 @@ namespace CustomCrawler
             textEditor.Options.ConvertTabsToSpaces = true;
             textEditor.PreviewMouseLeftButtonDown += TextEditor_PreviewMouseLeftButtonDown;
 
-            var bb = new Beautifier(new BeautifierOptions { IndentWithTabs =false, IndentSize = 4 });
-            raw = NetCommon.DownloadString(js_url);
+            var bb = new Beautifier(new BeautifierOptions { IndentWithTabs = false, IndentSize = 4 });
+            raw = js_code;
             pretty = bb.Beautify(raw);
 
             try
@@ -81,16 +81,29 @@ namespace CustomCrawler
                 s1 = p1.ParseScript(true);
                 s2 = p2.ParseScript(true);
 
-                (l, c) = (line, column);
+                if (line == -1 || column == -1)
+                    (l, c) = (1, 1);
+                else
+                    (l, c) = (line, column);
                 this.no_pretty = no_pretty;
 
                 Loaded += ScriptViewer_Loaded;
             }
-            catch 
+            catch
             {
                 Beautify.IsEnabled = false;
                 textEditor.Text = raw;
             }
+        }
+
+        public ScriptViewer(string js_url, int line = -1, int column = -1, bool no_pretty = false)
+        {
+            init_with_code(NetCommon.DownloadString(js_url), line, column, no_pretty);
+        }
+
+        public ScriptViewer(bool foo, string js_code, int line = -1, int column = -1, bool no_pretty = false)
+        {
+            init_with_code(js_code, line, column, no_pretty);
         }
 
         private void ScriptViewer_Loaded(object sender, RoutedEventArgs e)

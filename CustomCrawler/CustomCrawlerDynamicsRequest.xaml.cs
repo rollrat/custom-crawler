@@ -94,9 +94,6 @@ namespace CustomCrawler
 
             env.Subscribe<ChildNodeInsertedEvent>(x =>
             {
-                var xx = "";
-                //if (x.Node == null || x.Node.Attributes == null)
-                //    xx = string.Join(",", x.Node.Attributes);
                 Application.Current.Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
@@ -104,22 +101,32 @@ namespace CustomCrawler
                     {
                         Id = (++index_count).ToString(),
                         Type = "ChildNodeInserted",
-                        Url = $"{x.Node.NodeName} {xx}"
+                        Url = $"{x.Node.NodeName}"
                     });
                 }));
             });
 
-            env.Subscribe<ScriptParsedEvent>(x =>
+            env.Subscribe<ScriptParsedEvent>(async x =>
             {
-                Task.Run(() => parent.add_script_info(x));
+                _ = Task.Run(() => parent.add_script_info(x));
                 if (x.Url == "")
                 {
                     var pos = "";
 
                     if (x.StackTrace != null)
                     {
-                        pos = $"{x.StackTrace.CallFrames[0].Url}:<{x.StackTrace.CallFrames[0].FunctionName}>:{x.StackTrace.CallFrames[0].LineNumber}:{x.StackTrace.CallFrames[0].ColumnNumber}";
-                        Application.Current.Dispatcher.BeginInvoke(new Action(
+                        pos = $"{x.StackTrace.CallFrames[0].Url}:<{x.StackTrace.CallFrames[0].FunctionName}>:{x.StackTrace.CallFrames[0].LineNumber + 1}:{x.StackTrace.CallFrames[0].ColumnNumber + 1}";
+
+                        // Cannot get the script code later.
+                        var src_snippet = await CustomCrawlerDynamics.ss.SendAsync(new GetScriptSourceCommand { ScriptId = x.ScriptId });
+                        var src_code = "";
+                        if (src_snippet.Result != null)
+                        {
+                            src_code = $"/* this code is generated from {pos} */\r\n";
+                            src_code += src_snippet.Result.ScriptSource;
+                        }
+
+                        await Application.Current.Dispatcher.BeginInvoke(new Action(
                         delegate
                         {
                             (RequestList.DataContext as CustomCrawlerDynamicsRequestDataGridViewModel).Items.Add(new CustomCrawlerDynamicsRequestDataGridItemViewModel
@@ -127,6 +134,8 @@ namespace CustomCrawler
                                 Id = (++index_count).ToString(),
                                 Type = "AnonymouseParsed",
                                 Url = pos,
+                                AnonymouseCode = src_code,
+                                AnonymouseSource = x.StackTrace.CallFrames[0]
                             });
                         }));
                     }
@@ -149,11 +158,19 @@ namespace CustomCrawler
             if (RequestList.SelectedItems.Count > 0)
             {
                 var item = (RequestList.SelectedItems[0] as CustomCrawlerDynamicsRequestDataGridItemViewModel);
+
                 RequestWillBeSentEvent request = item.Request;
                 ResponseReceivedEvent response = item.Response;
 
                 if (request == null && response == null)
+                {
+                    if (item.AnonymouseCode != "")
+                    {
+                        new ScriptViewer(item.AnonymouseSource.Url, (int)item.AnonymouseSource.LineNumber + 1, (int)item.AnonymouseSource.ColumnNumber + 1, false).Show();
+                        new ScriptViewer(false, item.AnonymouseCode).Show();
+                    }
                     return;
+                }
 
                 if (request == null)
                 {

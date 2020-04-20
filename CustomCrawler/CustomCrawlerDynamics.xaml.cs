@@ -8,7 +8,6 @@
 
 using CefSharp;
 using CefSharp.Wpf;
-using CustomCrawler.Analysis;
 using CustomCrawler.chrome_devtools;
 using HtmlAgilityPack;
 using MasterDevs.ChromeDevTools;
