@@ -31,5 +31,10 @@ namespace CustomCrawler
         {
             InitializeComponent();
         }
+
+        private void CallStack_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+
+        }
     }
 }

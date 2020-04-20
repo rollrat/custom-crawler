@@ -106,5 +106,40 @@ namespace CustomCrawler
 
             find_internal(ref result, z.ChildNodes, line, column);
         }
+
+        public List<IFunction> EnumerateFunctionEntries(string url)
+            => EnumerateNodes<IFunction>(url);
+
+        public List<CallExpression> EnumerateCallExpressions(string url)
+            => EnumerateNodes<CallExpression>(url);
+
+        public List<T> EnumerateNodes<T>(string url)
+            where T : INode
+        {
+            var result = new List<T>();
+
+            if (contents.ContainsKey(url))
+            {
+                var script = contents[url];
+                enumerate_internal(ref result, script.ChildNodes);
+            }
+
+            return result;
+        }
+
+        void enumerate_internal<T>(ref List<T> result, IEnumerable<INode> node)
+            where T: INode
+        {
+            if (node == null || node.Count() == 0)
+                return;
+
+            var nrr = node.Where(x => x != null).ToList();
+            foreach (var nn in nrr)
+            {
+                if (nn is T)
+                    result.Add((T)nn);
+                enumerate_internal(ref result, nn.ChildNodes);
+            }
+        }
     }
 }

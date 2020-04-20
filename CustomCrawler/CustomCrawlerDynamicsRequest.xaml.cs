@@ -8,6 +8,7 @@
 
 using CustomCrawler.chrome_devtools;
 using MasterDevs.ChromeDevTools;
+using MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger;
 using MasterDevs.ChromeDevTools.Protocol.Chrome.DOM;
 using MasterDevs.ChromeDevTools.Protocol.Chrome.Network;
 using Newtonsoft.Json;
@@ -34,11 +35,13 @@ namespace CustomCrawler
     public partial class CustomCrawlerDynamicsRequest : Window
     {
         int index_count = 0;
+        CustomCrawlerDynamics parent;
 
         public CustomCrawlerDynamicsRequest(IChromeSession env, CustomCrawlerDynamics parent)
         {
             InitializeComponent();
 
+            this.parent = parent;
             RequestList.DataContext = new CustomCrawlerDynamicsRequestDataGridViewModel();
             RequestList.Sorting += new DataGridSortingEventHandler(new DataGridSorter<CustomCrawlerDynamicsRequestDataGridItemViewModel>(RequestList).SortHandler);
 
@@ -106,6 +109,30 @@ namespace CustomCrawler
                 }));
             });
 
+            env.Subscribe<ScriptParsedEvent>(x =>
+            {
+                Task.Run(() => parent.add_script_info(x));
+                if (x.Url == "")
+                {
+                    Application.Current.Dispatcher.BeginInvoke(new Action(
+                    delegate
+                    {
+                        var pos = "";
+
+                        if (x.StackTrace != null)
+                        {
+                            pos = $"{x.StackTrace.CallFrames[0].Url}:<{x.StackTrace.CallFrames[0].FunctionName}>:{x.StackTrace.CallFrames[0].LineNumber}:{x.StackTrace.CallFrames[0].ColumnNumber}";
+                            (RequestList.DataContext as CustomCrawlerDynamicsRequestDataGridViewModel).Items.Add(new CustomCrawlerDynamicsRequestDataGridItemViewModel
+                            {
+                                Id = (++index_count).ToString(),
+                                Type = "AnonymouseParsed",
+                                Url = pos,
+                            });
+                        }
+                    }));
+                }
+            });
+
             //Closed += (s, e) =>
             //{
             //    env.Dispose();
@@ -115,6 +142,35 @@ namespace CustomCrawler
         private void RequestList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
 
+        }
+
+        private void RequestList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (RequestList.SelectedItems.Count > 0)
+            {
+                var item = (RequestList.SelectedItems[0] as CustomCrawlerDynamicsRequestDataGridItemViewModel);
+                RequestWillBeSentEvent request = item.Request;
+                ResponseReceivedEvent response = item.Response;
+
+                if (request == null && response == null)
+                    return;
+
+                if (request == null)
+                {
+                    lock (parent.requests)
+                        if (parent.requests_id.ContainsKey(response.RequestId))
+                            request = parent.requests_id[response.RequestId];
+                }
+                else if (response == null)
+                {
+                    lock (parent.response)
+                        if (parent.response.ContainsKey(request.RequestId))
+                            response = parent.response[request.RequestId];
+                }
+
+                if (request != null)
+                    new CustomCrawlerDynamicsRequestInfo(request, response).Show();
+            }
         }
     }
 }

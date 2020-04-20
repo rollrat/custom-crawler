@@ -17,6 +17,7 @@
 
         <DataGrid x:Name="RequestList" Grid.ColumnSpan="3" Grid.Row="1" ItemsSource="{Binding Items}" CanUserSortColumns="True" IsReadOnly="True" AutoGenerateColumns="False" FontSize="12"
                   SelectionMode="Extended" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" BorderThickness="1" Background="White" SelectedCellsChanged="RequestList_SelectedCellsChanged"
+                  MouseDoubleClick="RequestList_MouseDoubleClick"
                   CanUserAddRows="False" materialDesign:DataGridAssist.CellPadding="4 2 2 2" materialDesign:DataGridAssist.ColumnHeaderPadding="4 2 2 2">
             <DataGrid.Resources>
                 <ResourceDictionary>

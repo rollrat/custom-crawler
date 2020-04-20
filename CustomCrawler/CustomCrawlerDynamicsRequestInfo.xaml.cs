@@ -43,40 +43,43 @@ namespace CustomCrawler
             builder.Append(JsonConvert.SerializeObject(request.Request, Formatting.Indented));
             builder.Append($"\r\n");
             builder.Append($"\r\n");
-            builder.Append($"==============================================================================================================================\r\n");
-            builder.Append($"Response Raw:\r\n");
-
-            var result = CustomCrawlerDynamics.ss.SendAsync(new GetResponseBodyCommand
+            if (response != null)
             {
-                RequestId = request.RequestId
-            }).Result;
+                builder.Append($"==============================================================================================================================\r\n");
+                builder.Append($"Response Raw:\r\n");
 
-            string body;
+                var result = CustomCrawlerDynamics.ss.SendAsync(new GetResponseBodyCommand
+                {
+                    RequestId = request.RequestId
+                }).Result;
 
-            if (result.Result == null)
-            {
-                Info.Text = "An unknown error :(";
-                return;
+                string body;
+
+                if (result.Result == null)
+                {
+                    Info.Text = "An unknown error :(";
+                    return;
+                }
+
+                if (result.Result.Base64Encoded)
+                    result.Result.Body.TryParseBase64(out body);
+                else
+                    body = result.Result.Body;
+
+                try
+                {
+                    body = JsonConvert.SerializeObject(JToken.Parse(body), Formatting.Indented);
+                }
+                catch { }
+
+                builder.Append(body);
+
+                builder.Append($"\r\n");
+                builder.Append($"==============================================================================================================================\r\n");
+                builder.Append($"Response Body:\r\n");
+                builder.Append(JsonConvert.SerializeObject(response.Response, Formatting.Indented));
+                builder.Append($"\r\n");
             }
-
-            if (result.Result.Base64Encoded)
-                result.Result.Body.TryParseBase64(out body);
-            else
-                body = result.Result.Body;
-
-            try
-            {
-                body = JsonConvert.SerializeObject(JToken.Parse(body), Formatting.Indented);
-            }
-            catch { }
-
-            builder.Append(body);
-
-            builder.Append($"\r\n");
-            builder.Append($"==============================================================================================================================\r\n");
-            builder.Append($"Response Body:\r\n");
-            builder.Append(JsonConvert.SerializeObject(response.Response, Formatting.Indented));
-            builder.Append($"\r\n");
             builder.Append($"==============================================================================================================================\r\n");
             builder.Append($"Request Initiator:\r\n");
 

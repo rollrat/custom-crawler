@@ -8,6 +8,7 @@
 
 using CefSharp;
 using CefSharp.Wpf;
+using CustomCrawler.Analysis;
 using CustomCrawler.chrome_devtools;
 using HtmlAgilityPack;
 using MasterDevs.ChromeDevTools;
@@ -77,6 +78,14 @@ namespace CustomCrawler
             {
                 locking = !locking;
             }
+            else if (e.Key == Key.F5)
+            {
+                ss.SendAsync<MasterDevs.ChromeDevTools.Protocol.Chrome.Page.ReloadCommand>().Wait();
+            }
+            else if (e.Key == Key.F12) // Test
+            {
+                (new CustomCrawlerDynamicsBP(this)).Show();
+            }
         }
 
         private void Browser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
@@ -96,7 +105,7 @@ namespace CustomCrawler
         public static bool ignore_js(string url)
         {
             var filename = url.Split('?')[0].Split('/').Last();
-
+            
             if (filename.StartsWith("jquery"))
                 return true;
 
@@ -229,8 +238,10 @@ namespace CustomCrawler
 
                 JsManager.Instance.Clear();
                 requests = new List<RequestWillBeSentEvent>();
+                requests_id = new Dictionary<string, RequestWillBeSentEvent>();
                 what_is_near = new Dictionary<string, HashSet<int>>();
                 response = new Dictionary<string, ResponseReceivedEvent>();
+                scripts = new List<MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.ScriptParsedEvent>();
                 ss = await ChromeDevTools.Create();
                 (child = new CustomCrawlerDynamicsRequest(ss, this)).Show();
 
@@ -281,9 +292,13 @@ namespace CustomCrawler
 
         // <js filename, requests>
         public List<RequestWillBeSentEvent> requests;
+        public Dictionary<string, RequestWillBeSentEvent> requests_id;
         Dictionary<string, HashSet<int>> what_is_near;
         public void add_request_info(RequestWillBeSentEvent request)
         {
+            if (!requests_id.ContainsKey(request.RequestId))
+                requests_id.Add(request.RequestId, request);
+
             // Metadata files are filtered here.
             if (request.Initiator == null || request.Initiator.Stack == null ||
                 request.Initiator.Stack.CallFrames == null || request.Initiator.Stack.CallFrames.Length == 0)
@@ -295,7 +310,8 @@ namespace CustomCrawler
             if (ignore_js(request.Request.Url))
                 return;
 
-            requests.Add(request);
+            lock (requests)
+                requests.Add(request);
             var index = requests.Count - 1;
 
             var stack = request.Initiator.Stack;
@@ -318,7 +334,23 @@ namespace CustomCrawler
         public Dictionary<string, ResponseReceivedEvent> response;
         public void add_response_info(ResponseReceivedEvent res)
         {
-            response.Add(res.RequestId, res);
+            lock (response)
+                response.Add(res.RequestId, res);
+        }
+
+        public List<MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.ScriptParsedEvent> scripts;
+        public void add_script_info(MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.ScriptParsedEvent spe)
+        {
+            if (spe.Url == "")
+            {
+                var x = ss.SendAsync(new MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.GetScriptSourceCommand
+                {
+                    ScriptId = spe.ScriptId
+                }).Result;
+
+                ;
+            }
+            scripts.Add(spe);
         }
 
         public List<(CallFrame, int, int, int)> pick_candidate(string url, List<Esprima.Ast.INode> node, string function_name, int line, int column)
