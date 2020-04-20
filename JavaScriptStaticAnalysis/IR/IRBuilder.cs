@@ -15,11 +15,11 @@ namespace JavaScriptStaticAnalysis.IR
     /// </summary>
     public class IRBuilder
     {
-        Block entry_point;
+        IRComponent entry_point;
 
         public IRBuilder(Script script)
         {
-            visit(script.ChildNodes.First());
+            entry_point = visit(script.ChildNodes.First());
         }
 
         public static Type[] NodeTypes = new Type[] 
@@ -218,22 +218,120 @@ namespace JavaScriptStaticAnalysis.IR
             }
         }
 
-        private Value visitOnExpression(Expression expr)
+        private Expr visitOnExpression(Expression expr)
         {
+            var result = new Expr(expr);
+
             switch (expr.Type)
             {
                 case Nodes.ArrayExpression:
+                    {
+                        var ae = expr as ArrayExpression;
+
+                        foreach (var e in ae.Elements)
+                            result.Childs.Add(visit(e));
+                    }
+                    break;
+
                 case Nodes.ArrowFunctionExpression:
+                    {
+                        var afe = expr as ArrowFunctionExpression;
+
+                        result.Id = afe.Id.Name;
+                        foreach (var e in afe.Params)
+                            result.Args.Add(visit(e));
+                        result.Body = visit(afe.Body);
+                    }
+                    break;
+
                 case Nodes.AssignmentExpression:
+                    {
+                        var ae = expr as AssignmentExpression;
+
+                        result.Defs.Add(visit(ae.Left));
+                        result.Childs.Add(visitOnExpression(ae.Right));
+                    }
+                    break;
+
                 case Nodes.AwaitExpression:
-                case Nodes.BinaryExpression:
-                case Nodes.CallExpression:
-                case Nodes.ClassExpression:
-                case Nodes.ConditionalExpression:
+                    {
+                        var ae = expr as AwaitExpression;
+
+                        result.Childs.Add(visitOnExpression(ae.Argument));
+                    }
+                    break;
+
                 case Nodes.LogicalExpression:
+                case Nodes.BinaryExpression:
+                    {
+                        var be = expr as BinaryExpression;
+
+                        result.Childs.Add(visitOnExpression(be.Left));
+                        result.Childs.Add(visitOnExpression(be.Right));
+                    }
+                    break;
+
+                case Nodes.CallExpression:
+                    {
+                        var ce = expr as Esprima.Ast.CallExpression;
+
+                        foreach (var e in ce.Arguments)
+                            result.Args.Add(visit(e));
+                        result.Body = visitOnExpression(ce.Callee);
+                    }
+                    break;
+
+                case Nodes.ClassExpression:
+                    {
+                        var ce = expr as ClassExpression;
+
+                        result.Id = ce.Id.Name;
+                        result.Super = visit(ce.SuperClass);
+                        result.ClassBody = ce.Body;
+                    }
+                    break;
+
+                case Nodes.ConditionalExpression:
+                    {
+                        var ce = expr as ConditionalExpression;
+
+                        result.Childs.Add(visitOnExpression(ce.Test));
+                        result.Childs.Add(visitOnExpression(ce.Consequent));
+                        result.Childs.Add(visitOnExpression(ce.Alternate));
+                    }
+                    break;
+
                 case Nodes.FunctionExpression:
+                    {
+                        var fe = expr as FunctionExpression;
+
+                        result.Id = fe.Id.Name;
+                        foreach (var e in fe.Params)
+                            result.Args.Add(visit(e));
+                        result.Body = visit(fe.Body);
+                    }
+                    break;
+
                 case Nodes.MemberExpression:
+                    {
+                        var me = expr as MemberExpression;
+
+                        result.Uses.Add(visitOnExpression(me.Object));
+                        result.Member = visitOnExpression(me.Property);
+                    }
+                    break;
+
                 case Nodes.NewExpression:
+                    //{
+                    //    var ne = expr as NewExpression;
+
+                    //    foreach (var arg in ne.Arguments)
+                    //        result.Args.Add(visit(arg));
+                    //    result.Body = visitOnExpression(ne.Callee);
+                    //    result.IsNew = true;
+                    //}
+                    //break;
+
                 case Nodes.ObjectExpression:
                 case Nodes.SequenceExpression:
                 case Nodes.TaggedTemplateExpression:
@@ -241,7 +339,7 @@ namespace JavaScriptStaticAnalysis.IR
                 case Nodes.UnaryExpression:
                 case Nodes.UpdateExpression:
                 case Nodes.YieldExpression:
-                    break;
+                    return new Expr(expr);
             }
 
             // never triggered.
@@ -414,7 +512,7 @@ namespace JavaScriptStaticAnalysis.IR
                 case Nodes.ExpressionStatement:
                     {
                         var expr = stmt as ExpressionStatement;
-                        return new Expr(stmt) { Value = visitOnExpression(expr.Expression) };
+                        return new Expr(stmt) { Value = visitOnExpression(expr.Expression), IsStatement = true };
                     }
 
                 case Nodes.ForInStatement:
@@ -671,7 +769,6 @@ namespace JavaScriptStaticAnalysis.IR
         {
             switch (decl.Type)
             {
-
                 case Nodes.ClassDeclaration:
                 case Nodes.ExportAllDeclaration:
                 case Nodes.ExportDefaultDeclaration:

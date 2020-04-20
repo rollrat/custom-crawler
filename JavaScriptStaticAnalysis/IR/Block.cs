@@ -21,6 +21,7 @@ namespace JavaScriptStaticAnalysis.IR
             : base(node)
         {
             ChildBlocks = new List<Block>();
+            Childs = new List<IRComponent>();
         }
     }
 }

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context.cs" />
+    <Compile Include="IR\Analysis\Alias.cs" />
     <Compile Include="IR\Block.cs" />
     <Compile Include="IR\CallExpression.cs" />
     <Compile Include="IR\Expr.cs" />

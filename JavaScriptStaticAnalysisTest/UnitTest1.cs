@@ -12,7 +12,9 @@ namespace JavaScriptStaticAnalysisTest
         [TestMethod]
         public void TestMethod1()
         {
-            Context ctx = Context.CreateInstance(@"a=0;");
+            Context ctx = Context.CreateInstance(@"
+for (i = 0; i < 10; i++)
+    a += i;");
             IRBuilder bb = new IRBuilder(ctx.Script);
         }
     }
