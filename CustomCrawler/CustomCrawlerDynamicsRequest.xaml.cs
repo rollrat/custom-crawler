@@ -170,7 +170,7 @@ namespace CustomCrawler
                     }
                     if (item.AnonymouseCode != "")
                     {
-                        new ScriptViewer(false, item.AnonymouseCode).Show();
+                        new ScriptViewer(false, item.AnonymouseCode, -1, -1, true).Show();
                     }
                     return;
                 }

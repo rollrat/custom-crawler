@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -48,32 +49,55 @@ namespace CustomCrawler
                 builder.Append($"==============================================================================================================================\r\n");
                 builder.Append($"Response Raw:\r\n");
 
-                var result = CustomCrawlerDynamics.ss.SendAsync(new GetResponseBodyCommand
-                {
-                    RequestId = request.RequestId
-                }).Result;
+                CommandResponse<GetResponseBodyCommandResponse> result = null;
+                //var t1 = Task.Run(() =>
+                //{
+                //    Thread.Sleep(2000);
+                //    source.Cancel();
+                //});
 
-                string body;
-
-                if (result.Result == null)
+                Task.Run(async () =>
                 {
-                    Info.Text = "An unknown error :(";
-                    return;
+                    var source = new CancellationTokenSource();
+                    var token = source.Token;
+
+                    //token.Register(() =>
+                    //{
+                    //    ;
+                    //});
+                    //
+                    //_ = Task.Run(() => { Thread.Sleep(1000); source.Cancel(); }, token);
+
+                    //source.CancelAfter(2000);
+
+                    token.WaitHandle.WaitOne(TimeSpan.FromSeconds(2));
+
+                    //Thread.Sleep(10000);
+
+                    result = await CustomCrawlerDynamics.ss.SendAsync(new GetResponseBodyCommand { RequestId = request.RequestId }, token);
+                }).Wait();
+
+                if (result.Result != null)
+                {
+                    string body;
+
+                    if (result.Result.Base64Encoded)
+                        result.Result.Body.TryParseBase64(out body);
+                    else
+                        body = result.Result.Body;
+
+                    try
+                    {
+                        body = JsonConvert.SerializeObject(JToken.Parse(body), Formatting.Indented);
+                    }
+                    catch { }
+
+                    builder.Append(body);
                 }
-
-                if (result.Result.Base64Encoded)
-                    result.Result.Body.TryParseBase64(out body);
                 else
-                    body = result.Result.Body;
-
-                try
                 {
-                    body = JsonConvert.SerializeObject(JToken.Parse(body), Formatting.Indented);
+                    builder.Append("Internal error! Try again! :(");
                 }
-                catch { }
-
-                builder.Append(body);
-
                 builder.Append($"\r\n");
                 builder.Append($"==============================================================================================================================\r\n");
                 builder.Append($"Response Body:\r\n");

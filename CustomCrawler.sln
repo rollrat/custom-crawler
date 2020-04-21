@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScriptStaticAnalysis", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScriptStaticAnalysisTest", "JavaScriptStaticAnalysisTest\JavaScriptStaticAnalysisTest.csproj", "{C05675C7-4498-4B78-95C7-C7A9B730AC3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomCrawlerDynamics", "CustomCrawlerDynamics\CustomCrawlerDynamics.csproj", "{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|x64.Build.0 = Release|Any CPU
 		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|x86.ActiveCfg = Release|Any CPU
 		{C05675C7-4498-4B78-95C7-C7A9B730AC3C}.Release|x86.Build.0 = Release|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Debug|x64.Build.0 = Debug|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Debug|x86.Build.0 = Debug|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Release|x64.ActiveCfg = Release|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Release|x64.Build.0 = Release|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{C685DAA3-6C44-4B7B-AD70-FA8B54EFF1BE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

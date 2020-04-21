@@ -194,7 +194,13 @@ namespace MasterDevs.ChromeDevTools
             {
                 EnsureInit();
                 _webSocket.Send(requestString);
-                requestResetEvent.Wait(cancellationToken);
+                try
+                {
+                    requestResetEvent.Wait(cancellationToken);
+                }
+                catch (Exception e) {
+                    ; 
+                }
                 ICommandResponse response = null;
                 _responses.TryRemove(command.Id, out response);
                 _requestWaitHandles.TryRemove(command.Id, out requestResetEvent);

@@ -32,6 +32,7 @@ namespace CustomCrawler
         public ResponseReceivedEvent Response { get; set; }
         public string AnonymouseCode { get; set; }
         public CallFrame AnonymouseSource { get; set; }
+        public MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.ScriptParsedEvent Parsed { get; set; }
 
         private string _index;
         public string Id
