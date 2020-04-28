@@ -23,7 +23,8 @@ This program only runs on `Windows 10`.
    - [2.2. Find Download(Requested) Data Associated With Dynamic Added Elements](#22-find-downloadrequested-data-associated-with-dynamic-added-elements)
    - [2.3. Deep Scan](#23-deep-scan)
  - [3. JavaScript Static Analysis](#3-javascript-static-analysis)
- - [4. Crawler Generator](#4-crawler-generator)
+ - [4. WebAssembly Supports](#4-webassembly-supports)
+ - [5. Crawler Generator](#5-crawler-generator)
  - [Libraries](#libraries)
 
 ## Download
@@ -220,7 +221,9 @@ It will also be integrated with JavaScript static analysis tools in the future.
 
 This feature is currently being implemented.
 
-### 4. Crawler Generator
+### 4. WebAssembly Supports
+
+### 5. Crawler Generator
 
 ## Libraries
 
