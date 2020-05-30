@@ -39,7 +39,7 @@ namespace CustomCrawler
     public partial class CustomCrawlerDynamics : Window
     {
         ChromiumWebBrowser browser;
-        CallbackCCW cbccw;
+        //CallbackCCW cbccw;
         CustomCrawlerDynamicsHover hover;
         public static bool opened = false;
 
@@ -52,8 +52,8 @@ namespace CustomCrawler
 
             browser.LoadingStateChanged += Browser_LoadingStateChanged;
 
-            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            browser.JavascriptObjectRepository.Register("ccw", cbccw = new CallbackCCW(this), isAsync: true);
+            //CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+            //browser.JavascriptObjectRepository.Register("ccw", cbccw = new CallbackCCW(this), isAsync: true);
 
             Closed += CustomCrawlerDynamics_Closed;
 
@@ -92,6 +92,7 @@ namespace CustomCrawler
                 scripts = new List<MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.ScriptParsedEvent>();
                 ss = await ChromeDevTools.Create();
                 (child = new CustomCrawlerDynamicsRequest(ss, this)).Show();
+                init_overlay();
 
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(
                 delegate
@@ -117,11 +118,16 @@ namespace CustomCrawler
             hover.Close();
         }
 
-        private void CustomCrawlerDynamics_KeyDown(object sender, KeyEventArgs e)
+        bool locking;
+        private async void CustomCrawlerDynamics_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F2)
             {
                 locking = !locking;
+                if (locking)
+                    await enter_overlay();
+                else
+                    await leave_overlay();
             }
             else if (e.Key == Key.F5)
             {
@@ -167,31 +173,31 @@ namespace CustomCrawler
             return false;
         }
 
-        bool locking = false;
-        public class CallbackCCW
-        {
-            CustomCrawlerDynamics instance;
-            string before = "";
-            public string before_border = "";
-            public CallbackCCW(CustomCrawlerDynamics instance)
-            {
-                this.instance = instance;
-            }
-            public void hoverelem(string elem)
-            {
-                if (instance.locking) return;
-                Application.Current.Dispatcher.BeginInvoke(new Action(
-                async delegate
-                {
-                    instance.browser.GetMainFrame().EvaluateScriptAsync($"document.querySelector('[{before}]').style.border = '{before_border}';").Wait();
-                    before = $"ccw_tag={elem}";
-                    before_border = instance.browser.GetMainFrame().EvaluateScriptAsync($"document.querySelector('[{before}]').style.border").Result.Result.ToString();
-                    instance.browser.GetMainFrame().EvaluateScriptAsync($"document.querySelector('[{before}]').style.border = '0.2em solid red';").Wait();
-
-                    await instance.hover.Update(elem);
-                }));
-            }
-        }
+        //bool locking = false;
+        //public class CallbackCCW
+        //{
+        //    CustomCrawlerDynamics instance;
+        //    string before = "";
+        //    public string before_border = "";
+        //    public CallbackCCW(CustomCrawlerDynamics instance)
+        //    {
+        //        this.instance = instance;
+        //    }
+        //    public void hoverelem(string elem)
+        //    {
+        //        if (instance.locking) return;
+        //        Application.Current.Dispatcher.BeginInvoke(new Action(
+        //        async delegate
+        //        {
+        //            instance.browser.GetMainFrame().EvaluateScriptAsync($"document.querySelector('[{before}]').style.border = '{before_border}';").Wait();
+        //            before = $"ccw_tag={elem}";
+        //            before_border = instance.browser.GetMainFrame().EvaluateScriptAsync($"document.querySelector('[{before}]').style.border").Result.Result.ToString();
+        //            instance.browser.GetMainFrame().EvaluateScriptAsync($"document.querySelector('[{before}]').style.border = '0.2em solid red';").Wait();
+        //
+        //            await instance.hover.Update(elem);
+        //        }));
+        //    }
+        //}
 
         List<Window> childs = new List<Window>();
         private void Hyperlink_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -212,46 +218,116 @@ namespace CustomCrawler
         #region Build for Hover
 
         public Dictionary<string, StackTrace> stacks = new Dictionary<string, StackTrace>();
-        private async Task find_source(Node nn)
+        //private async Task find_source(Node nn)
+        //{
+        //    _ = Application.Current.Dispatcher.BeginInvoke(new Action(
+        //    delegate
+        //    {
+        //        URLText.Text = nn.NodeId.ToString();
+        //    }));
+        //    var st = await ss.SendAsync(new GetNodeStackTracesCommand { NodeId = nn.NodeId });
+        //    if (st.Result != null && st.Result.Creation != null)
+        //    {
+        //        stacks.Add("ccw_" + nn.NodeId, st.Result.Creation);
+        //    }
+        //    if (nn.NodeType == 1)
+        //    {
+        //        await ss.SendAsync(new SetAttributeValueCommand
+        //        {
+        //            NodeId = nn.NodeId,
+        //            Name = "ccw_tag",
+        //            Value = "ccw_" + nn.NodeId
+        //        });
+        //        await ss.SendAsync(new SetAttributeValueCommand
+        //        {
+        //            NodeId = nn.NodeId,
+        //            Name = "onmouseenter",
+        //            Value = $"ccw.hoverelem('ccw_{nn.NodeId}')"
+        //        });
+        //        await ss.SendAsync(new SetAttributeValueCommand
+        //        {
+        //            NodeId = nn.NodeId,
+        //            Name = "onmouseleave",
+        //            Value = $"ccw.hoverelem('ccw_{nn.NodeId}')"
+        //        });
+        //    }
+        //    if (nn.Children != null)
+        //    {
+        //        foreach (var child in nn.Children)
+        //        {
+        //            await find_source(child);
+        //        }
+        //    }
+        //}
+
+        private void init_overlay()
         {
-            _ = Application.Current.Dispatcher.BeginInvoke(new Action(
-            delegate
+            ss.Subscribe<MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.InspectNodeRequestedEvent>(async x =>
             {
-                URLText.Text = nn.NodeId.ToString();
-            }));
-            var st = await ss.SendAsync(new GetNodeStackTracesCommand { NodeId = nn.NodeId });
-            if (st.Result != null && st.Result.Creation != null)
+                await Application.Current.Dispatcher.BeginInvoke(new Action(
+                async delegate
+                {
+                    await hover.Update(x.BackendNodeId);
+                }));
+            });
+
+            ss.Subscribe<MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.NodeHighlightRequestedEvent>(x =>
             {
-                stacks.Add("ccw_" + nn.NodeId, st.Result.Creation);
-            }
-            if (nn.NodeType == 1)
+                ;
+            });
+
+            //ss.Subscribe<MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.InspectModeCanceledEvent>(x =>
+            //{
+            //    ;
+            //});
+        }
+
+        private Task enter_overlay()
+        {
+            return ss.SendAsync(new MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.SetInspectModeCommand
             {
-                await ss.SendAsync(new SetAttributeValueCommand
+                Mode = "searchForNode",
+                HighlightConfig = new MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.HighlightConfig
                 {
-                    NodeId = nn.NodeId,
-                    Name = "ccw_tag",
-                    Value = "ccw_" + nn.NodeId
-                });
-                await ss.SendAsync(new SetAttributeValueCommand
-                {
-                    NodeId = nn.NodeId,
-                    Name = "onmouseenter",
-                    Value = $"ccw.hoverelem('ccw_{nn.NodeId}')"
-                });
-                await ss.SendAsync(new SetAttributeValueCommand
-                {
-                    NodeId = nn.NodeId,
-                    Name = "onmouseleave",
-                    Value = $"ccw.hoverelem('ccw_{nn.NodeId}')"
-                });
-            }
-            if (nn.Children != null)
-            {
-                foreach (var child in nn.Children)
-                {
-                    await find_source(child);
+                    ShowInfo = true,
+                    ShowRulers = false,
+                    ShowStyles = true,
+                    ShowExtensionLines = false,
+                    ContentColor = new RGBA { R = 111, G = 168, B = 220, A = 0.66 },
+                    PaddingColor = new RGBA { R = 147, G = 196, B = 125, A = 0.55 },
+                    BorderColor = new RGBA { R = 255, G = 229, B = 153, A = 0.66 },
+                    MarginColor = new RGBA { R = 246, G = 178, B = 107, A = 0.66 },
+                    EventTargetColor = new RGBA { R = 255, G = 196, B = 196, A = 0.66 },
+                    ShapeColor = new RGBA { R = 96, G = 82, B = 177, A = 0.8 },
+                    ShapeMarginColor = new RGBA { R = 96, G = 82, B = 127, A = 0.6 },
+                    CssGridColor = new RGBA { R = 75, G = 0, B = 130 },
                 }
-            }
+            });
+        }
+
+        private Task leave_overlay()
+        {
+            return ss.SendAsync(new MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.SetInspectModeCommand
+            {
+                // searchForNode, searchForUAShadowDOM, captureAreaScreenshot, showDistances, none
+                Mode = "none",
+                HighlightConfig = new MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.HighlightConfig
+                {
+                    ShowInfo = true,
+                    ShowRulers = false,
+                    ShowStyles = true,
+                    ShowExtensionLines = false,
+                    ContentColor = new RGBA { R = 111, G = 168, B = 220, A = 0.66 },
+                    PaddingColor = new RGBA { R = 147, G = 196, B = 125, A = 0.55 },
+                    BorderColor = new RGBA { R = 255, G = 229, B = 153, A = 0.66 },
+                    MarginColor = new RGBA { R = 246, G = 178, B = 107, A = 0.66 },
+                    EventTargetColor = new RGBA { R = 255, G = 196, B = 196, A = 0.66 },
+                    ShapeColor = new RGBA { R = 96, G = 82, B = 177, A = 0.8 },
+                    ShapeMarginColor = new RGBA { R = 96, G = 82, B = 127, A = 0.6 },
+                    CssGridColor = new RGBA { R = 75, G = 0, B = 130 },
+                }
+            });
+            //await ss.SendAsync(new MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.HideHighlightCommand());
         }
 
         private async void Button_Click_1(object sender, RoutedEventArgs e)
@@ -266,8 +342,8 @@ namespace CustomCrawler
 
             if (doc.Result != null)
             {
-                stacks = new Dictionary<string, StackTrace>();
-                await find_source(doc.Result.Root);
+                //stacks = new Dictionary<string, StackTrace>();
+                //await find_source(doc.Result.Root);
 
             }
             else
@@ -336,7 +412,8 @@ namespace CustomCrawler
         public void add_response_info(ResponseReceivedEvent res)
         {
             lock (response)
-                response.Add(res.RequestId, res);
+                if (!response.ContainsKey(res.RequestId))
+                    response.Add(res.RequestId, res);
         }
 
         public List<MasterDevs.ChromeDevTools.Protocol.Chrome.Debugger.ScriptParsedEvent> scripts;

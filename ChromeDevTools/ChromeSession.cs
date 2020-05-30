@@ -3,6 +3,7 @@ using MasterDevs.ChromeDevTools.Serialization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -194,13 +195,7 @@ namespace MasterDevs.ChromeDevTools
             {
                 EnsureInit();
                 _webSocket.Send(requestString);
-                try
-                {
-                    requestResetEvent.Wait(cancellationToken);
-                }
-                catch (Exception e) {
-                    ; 
-                }
+                requestResetEvent.Wait(cancellationToken);
                 ICommandResponse response = null;
                 _responses.TryRemove(command.Id, out response);
                 _requestWaitHandles.TryRemove(command.Id, out requestResetEvent);

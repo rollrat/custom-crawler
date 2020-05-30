@@ -6,6 +6,8 @@
 
 ***/
 
+using MasterDevs.ChromeDevTools;
+using MasterDevs.ChromeDevTools.Protocol.Chrome.DOM;
 using MasterDevs.ChromeDevTools.Protocol.Chrome.Runtime;
 using System;
 using System.Collections.Generic;
@@ -59,11 +61,14 @@ namespace CustomCrawler
             childs.Where(x => x.IsLoaded).ToList().ForEach(x => x.Close());
         }
 
-        public async Task Update(string elem)
+        public async Task Update(long nodeid)
         {
-            if (parent.stacks.ContainsKey(elem))
+            var dom = await CustomCrawlerDynamics.ss.SendAsync(new GetDocumentCommand());
+            var nn = await CustomCrawlerDynamics.ss.SendAsync(new PushNodesByBackendIdsToFrontendCommand { BackendNodeIds = new long[] { nodeid } });
+            var mm = await CustomCrawlerDynamics.ss.SendAsync(new GetNodeStackTracesCommand { NodeId = nn.Result.NodeIds[0] });
+            var stack = mm.Result.Creation;
+            if (stack != null)
             {
-                var stack = parent.stacks[elem];
                 var depth = 0;
 
                 var paragraph = new Paragraph();

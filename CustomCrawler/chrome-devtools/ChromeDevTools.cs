@@ -63,6 +63,12 @@ namespace CustomCrawler.chrome_devtools
             {
                 Enable = true,
             });
+            await chromeSession.SendAsync(new MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.EnableCommand());
+            await chromeSession.SendAsync(new MasterDevs.ChromeDevTools.Protocol.Chrome.Overlay.SetShowViewportSizeOnResizeCommand 
+            { 
+                Show = true
+            });
+
 
             return chromeSession;
         }

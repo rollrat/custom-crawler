@@ -3,7 +3,7 @@
 
 using CefSharp;
 using CefSharp.Wpf;
-using CustomCrawlerDynamics.Javascript;
+using CustomCrawlerDynamics.Code;
 using CustomCrawlerDynamics.Utils;
 using System;
 using System.Collections.Generic;

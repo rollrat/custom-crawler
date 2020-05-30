@@ -14,6 +14,7 @@ using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,13 +50,23 @@ namespace CustomCrawler
                 builder.Append($"==============================================================================================================================\r\n");
                 builder.Append($"Response Raw:\r\n");
 
-                CommandResponse<GetResponseBodyCommandResponse> result = null;
-                //var t1 = Task.Run(() =>
+                //var raw = request_imitation(request.Request);
+                //
+                //try
                 //{
-                //    Thread.Sleep(2000);
-                //    source.Cancel();
-                //});
+                //    raw = JsonConvert.SerializeObject(JToken.Parse(raw), Formatting.Indented);
+                //}
+                //catch { }
+                //
+                //builder.Append(raw);
 
+                CommandResponse<GetResponseBodyCommandResponse> result = null;
+                ////var t1 = Task.Run(() =>
+                ////{
+                ////    Thread.Sleep(2000);
+                ////    source.Cancel();
+                ////});
+                ///
                 Task.Run(async () =>
                 {
                     var source = new CancellationTokenSource();
@@ -120,6 +131,16 @@ namespace CustomCrawler
             }
 
             Info.Text = builder.ToString();
+        }
+
+        public string request_imitation(Request req)
+        {
+            var wc = new WebClient();
+            req.Headers.ToList().ForEach(x => wc.Headers.Add(x.Key, x.Value));
+            if (req.HasPostData.HasValue && req.HasPostData.Value)
+                return wc.UploadString(req.Url, req.Method, req.PostData);
+            else
+                return wc.DownloadString(req.Url);
         }
     }
 }
