@@ -6,6 +6,12 @@ This program only runs on `Windows 10`.
 
 한국어 설명(Korean Description): https://github.com/rollrat/custom-crawler/blob/master/CONCEPT.md
 
+## Notice 2020-05-31
+
+I am currently designing and verifying dynamics and related parts, 
+and I expect to see significant results within this year.
+I expect this program to use a very huge amount of computer resources.
+
 ## Menu
 
  - [Download](#download)
