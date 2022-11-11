@@ -48,7 +48,7 @@ namespace CustomCrawler
             browserContainer.Content = browser;
             browser.IsBrowserInitializedChanged += Browser_IsBrowserInitializedChanged;
 
-            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+            browser.JavascriptObjectRepository.Settings.LegacyBindingEnabled = true;
             browser.JavascriptObjectRepository.Register("ccw", cbccw = new CallbackCCW(this), isAsync: true);
 
             this.url = url;
