@@ -123,7 +123,7 @@ namespace CustomCrawler
 
         private void DiffList_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            if (DiffList.SelectedItems.Count > 0)
+            if (DiffList.SelectedItems.Count > 0 && browser.IsLoaded)
             {
                 var node = (DiffList.SelectedItems[0] as CustomCrawlerDiffDataGridItemViewModel).Location;
 

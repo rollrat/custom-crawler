@@ -87,9 +87,11 @@
             <Button x:Name="Diff" Content="Diff" Click="Diff_Click"/>
             <Button x:Name="Cluster" Margin="0 4 0 0" Content="Cluster" Click="Cluster_Click"/>
             <Button x:Name="Dynamics" Margin="0 4 0 0" Content="Dynamics" Click="Dynamics_Click"/>
+            <Button x:Name="URL" Margin="0 4 0 0" Content="URL Disasm" Click="URL_Click"/>
             <TextBlock Text="Options" Margin="0 4 0 0"/>
             <CheckBox x:Name="driverCheck" Margin="0 4 0 0" Content="Using driver" IsChecked="False"/>
             <CheckBox x:Name="EucKR" Content="Using EUC-KR" IsChecked="False"/>
+            <CheckBox x:Name="Mobile" Content="Mobile Agent" IsChecked="False"/>
             <TextBlock Text="Documents" Margin="0 16 0 0"/>
             <Button x:Name="Manual" Content="Manual" Click="Manual_Click" IsEnabled="False"/>
         </StackPanel>

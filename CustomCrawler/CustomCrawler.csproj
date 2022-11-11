@@ -208,6 +208,9 @@
     </Compile>
     <Compile Include="SeleniumWrapper.cs" />
     <Compile Include="URLHelper.cs" />
+    <Compile Include="URLTools.xaml.cs">
+      <DependentUpon>URLTools.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
     <Page Include="CustomCrawler.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -296,6 +299,10 @@
     <Compile Include="DataGridSorter.cs" />
     <Compile Include="JSManager.cs" />
     <Page Include="ScriptViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="URLTools.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

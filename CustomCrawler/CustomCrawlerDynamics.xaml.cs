@@ -217,7 +217,7 @@ namespace CustomCrawler
 
         #region Build for Hover
 
-        public Dictionary<string, StackTrace> stacks = new Dictionary<string, StackTrace>();
+        public Dictionary<long, StackTrace> stacks = new Dictionary<long, StackTrace>();
         //private async Task find_source(Node nn)
         //{
         //    _ = Application.Current.Dispatcher.BeginInvoke(new Action(
@@ -259,6 +259,26 @@ namespace CustomCrawler
         //        }
         //    }
         //}
+        private async Task find_source(Node nn)
+        {
+            _ = Application.Current.Dispatcher.BeginInvoke(new Action(
+            delegate
+            {
+                URLText.Text = nn.NodeId.ToString();
+            }));
+            var st = await ss.SendAsync(new GetNodeStackTracesCommand { NodeId = nn.NodeId });
+            if (st.Result != null && st.Result.Creation != null)
+            {
+                stacks.Add(nn.NodeId, st.Result.Creation);
+            }
+            if (nn.Children != null)
+            {
+                foreach (var child in nn.Children)
+                {
+                    await find_source(child);
+                }
+            }
+        }
 
         private void init_overlay()
         {
@@ -338,13 +358,29 @@ namespace CustomCrawler
                 Build.IsEnabled = false;
             }));
 
-            var doc = await ss.SendAsync(new GetDocumentCommand { Depth = -1 });
+            var docTask = ss.SendAsync(new GetDocumentCommand { Depth = -1 });
+            var whenAnyTask = await Task.WhenAny(docTask, Task.Delay(TimeSpan.FromSeconds(10)));
+
+            if (whenAnyTask != docTask)
+            {
+                await Application.Current.Dispatcher.BeginInvoke(new Action(
+                delegate
+                {
+                    MessageBox.Show("Please try again later! " +
+                        "If this error persists, restart the program. " +
+                        "If that continues, please open new issue to https://github.com/rollrat/custom-crawler.",
+                        "Custom Craweler", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Build.IsEnabled = true;
+                }));
+                return;
+            }
+
+            var doc = await docTask;
 
             if (doc.Result != null)
             {
-                //stacks = new Dictionary<string, StackTrace>();
-                //await find_source(doc.Result.Root);
-
+                stacks = new Dictionary<long, StackTrace>();
+                await find_source(doc.Result.Root);
             }
             else
             {

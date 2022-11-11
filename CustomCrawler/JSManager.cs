@@ -93,7 +93,7 @@ namespace CustomCrawler
             
             var z = node.ElementAt(ii);
 
-            if (z.Location.Start.Line > line || z.Location.End.Line < line)
+            if (z == null || z.Location.Start.Line > line || z.Location.End.Line < line)
                 return;
 
             if (z.Location.Start.Line == z.Location.End.Line)

@@ -92,6 +92,8 @@ namespace CustomCrawler
                         var client = NetCommon.GetDefaultClient();
                         if (EucKR.IsChecked == true)
                             client.Encoding = Encoding.GetEncoding(51949);
+                        if (Mobile.IsChecked == true)
+                            client.Headers["User-Agent"] = "Mozilla/5.0 (Android 7.0; Mobile; rv:54.0) Gecko/54.0 Firefox/54.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/603.2.4"; ;
                         html = client.DownloadString(URLText.Text);
                     }
                     else
@@ -508,6 +510,11 @@ namespace CustomCrawler
         {
             if (CustomCrawlerDynamics.opened == false)
                 new CustomCrawlerDynamics().Show();
+        }
+
+        private void URL_Click(object sender, RoutedEventArgs e)
+        {
+            new URLTools().Show();
         }
     }
 }

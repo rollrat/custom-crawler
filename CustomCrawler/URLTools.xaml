@@ -1,0 +1,36 @@
+﻿<Window x:Class="CustomCrawler.URLTools"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomCrawler"
+        mc:Ignorable="d"
+        Title="URLTools" Height="450" Width="800">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.Resources>
+            <Style x:Key="TextBlockStyleKey" TargetType="{x:Type TextBlock}">
+                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                <Setter Property="Margin" Value="5 0 0 0" />
+            </Style>
+        </Grid.Resources>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="URL: " FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox x:Name="URLText" Grid.Row="0" Grid.Column="1" FontSize="15"/>
+        <Button x:Name="URLButton" Content="Process" Grid.Row="0" Grid.Column="2" Width="120" Click="URLButton_Click" Margin="8 0 8 0"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Value: " FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Right"  Margin="0 4 0 0"/>
+        <TextBox x:Name="Process" Grid.Row="1" Grid.Column="1" FontSize="15" Margin="0 4 0 0"/>
+    </Grid>
+</Window>
