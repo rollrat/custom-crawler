@@ -10,9 +10,13 @@ First, get backend node id using node id
 
 https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-pushNodesByBackendIdsToFrontend
 
+https://github.com/rollrat/custom-crawler/blob/47e1dc0b87f905651282f1e1b22f9cd2a44c31f1/CustomCrawler/CustomCrawlerDynamicsHover.xaml.cs#L67
+
 Second, get node stack traces information
 
 https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getNodeStackTraces
+
+https://github.com/rollrat/custom-crawler/blob/47e1dc0b87f905651282f1e1b22f9cd2a44c31f1/CustomCrawler/CustomCrawlerDynamicsHover.xaml.cs#L68
 
 ## Find Download(Requested) Data Associated With Dynamic Added Elements
 
