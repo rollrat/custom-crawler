@@ -19,7 +19,7 @@ namespace CustomCrawler.Properties {
     // 클래스에서 자동으로 생성되었습니다.
     // 멤버를 추가하거나 제거하려면 .ResX 파일을 편집한 다음 /str 옵션을 사용하여 ResGen을
     // 다시 실행하거나 VS 프로젝트를 다시 빌드하십시오.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -65,10 +65,9 @@ namespace CustomCrawler.Properties {
         ///&lt;!-- syntaxdefinition for JavaScript 2.0 by Svante Lidman --&gt;
         ///&lt;!-- converted to AvalonEdit format by Siegfried Pammer in 2010 --&gt;
         ///&lt;SyntaxDefinition name=&quot;JavaScript&quot; extensions=&quot;.js&quot; xmlns=&quot;http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008&quot;&gt;
-        ///	&lt;Color name=&quot;Digits&quot; foreground=&quot;DarkBlue&quot; exampleText=&quot;3.14&quot; /&gt;
+        ///	&lt;!--&lt;Color name=&quot;Digits&quot; foreground=&quot;DarkBlue&quot; exampleText=&quot;3.14&quot; /&gt;
         ///	&lt;Color name=&quot;Comment&quot; foreground=&quot;Green&quot; exampleText=&quot;// comment&quot; /&gt;
-        ///	&lt;Color name=&quot;String&quot; foreground=&quot;Sienna&quot; exampleText=&quot;var text = &amp;quot;Hello, World!&amp;quot;;&quot; /&gt;
-        ///[나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///	&lt;Color name=&quot;String&quot; foreground=&quot;Sienna&quot; exampleText=&quot;var text = &amp;quot;Hello, World!&amp;quot;;&quot; [나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         public static string JavaScript_Mode {
             get {
