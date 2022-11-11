@@ -28,5 +28,6 @@ namespace MasterDevs.ChromeDevTools.Protocol.Chrome.Network{
 			Ping,
 			CSPViolationReport,
 			Other,
-	}
+			Preflight,
+    }
 }

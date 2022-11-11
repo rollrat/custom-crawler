@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.IO;
+using CustomCrawler.chrome_devtools;
+using static CustomCrawler.MainWindow;
 
 namespace CustomCrawler
 {
@@ -27,6 +29,19 @@ namespace CustomCrawler
                 //By default CefSharp will use an in-memory cache, you need to specify a Cache Folder to persist data
                 CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache")
             };
+
+            ChromeDevTools.Settings(ref settings);
+
+            settings.RegisterScheme(new CefCustomScheme()
+            {
+                SchemeName = "http",
+                SchemeHandlerFactory = new CefSharpSchemeHandlerFactory()
+            });
+            settings.RegisterScheme(new CefCustomScheme()
+            {
+                SchemeName = "https",
+                SchemeHandlerFactory = new CefSharpSchemeHandlerFactory()
+            });
 
             //Example of setting a command line argument
             //Enables WebRTC
