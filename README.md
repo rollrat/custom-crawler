@@ -8,30 +8,30 @@ This program only runs on `Windows 10`.
 
 ## Notice 2020-05-31
 
-I am currently designing and verifying dynamics and related parts, 
+I am currently designing and verifying dynamics and related parts,
 and I expect to see significant results within this year.
 I expect this program to use a very huge amount of computer resources.
 
 ## Menu
 
- - [Download](#download)
- - [Documents](#documents)
- - [0. Before Introducing This Tool...](#0-before-introducing-this-tool)
- - [1. Static Web Analysis](#1-static-web-analysis)
-   - [1.1. Tag Information Extraction](#11-tag-information-extraction)
-   - [1.2. Clustering Tool](#12-clustering-tool)
-     - [1.2.1. Linear Clustering](#121-linear-clustering)
-     - [1.2.2. Stylist Clustering](#122-stylist-clustering)
-     - [1.2.3. Formatted Pattern Extraction](#123-formatted-pattern-extraction)
-   - [1.3. Diff Tool](#13-diff-tool)
- - [2. Dynamic Web Analysis](#2dynamic-web-analysis)
-   - [2.1. Dynamic DOM Analysis](#21-dynamic-dom-analysis)
-   - [2.2. Find Download(Requested) Data Associated With Dynamic Added Elements](#22-find-downloadrequested-data-associated-with-dynamic-added-elements)
-   - [2.3. Deep Scan](#23-deep-scan)
- - [3. JavaScript Static Analysis](#3-javascript-static-analysis)
- - [4. WebAssembly Supports](#4-webassembly-supports)
- - [5. Crawler Generator](#5-crawler-generator)
- - [Libraries](#libraries)
+- [Download](#download)
+- [Documents](#documents)
+- [0. Before Introducing This Tool...](#0-before-introducing-this-tool)
+- [1. Static Web Analysis](#1-static-web-analysis)
+  - [1.1. Tag Information Extraction](#11-tag-information-extraction)
+  - [1.2. Clustering Tool](#12-clustering-tool)
+    - [1.2.1. Linear Clustering](#121-linear-clustering)
+    - [1.2.2. Stylist Clustering](#122-stylist-clustering)
+    - [1.2.3. Formatted Pattern Extraction](#123-formatted-pattern-extraction)
+  - [1.3. Diff Tool](#13-diff-tool)
+- [2. Dynamic Web Analysis](#2dynamic-web-analysis)
+  - [2.1. Dynamic DOM Analysis](#21-dynamic-dom-analysis)
+  - [2.2. Find Download(Requested) Data Associated With Dynamic Added Elements](#22-find-downloadrequested-data-associated-with-dynamic-added-elements)
+  - [2.3. Deep Scan](#23-deep-scan)
+- [3. JavaScript Static Analysis](#3-javascript-static-analysis)
+- [4. WebAssembly Supports](#4-webassembly-supports)
+- [5. Crawler Generator](#5-crawler-generator)
+- [Libraries](#libraries)
 
 ## Download
 
@@ -40,6 +40,8 @@ Latest Version: https://github.com/rollrat/custom-crawler/releases/download/2020
 ## Documents
 
 [About JavaScript Static Analysis](Documents/JavaScriptAnalysis.md)
+
+[Dynamics](Documents/Dynamics.md)
 
 ## 0. Before Introducing This Tool...
 
@@ -212,9 +214,11 @@ You can see where this element was created.
 ### 2.2. Find Download(Requested) Data Associated With Dynamic Added Elements
 
 This is where many people spend their time building crawlers.
-If you know which elements are associated with which files, 
+If you know which elements are associated with which files,
 the complexity of dynamic analysis can be greatly reduced.
 This feature is not completely accurate, but it lists very very closely related files.
+
+For more detail, check [Dynamics](Documents/Dynamics.md)
 
 ### 2.3. Deep Scan
 
