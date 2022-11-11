@@ -36,47 +36,8 @@ namespace CustomCrawler
         {
             InitializeComponent();
 
-#if ANYCPU
-            //Only required for PlatformTarget of AnyCPU
-            CefRuntime.SubscribeAnyCpuAssemblyResolver();
-#endif
-
-            //CefSettings set = new CefSettings();
-            //ChromeDevtoolsEnvironment.Settings(ref set);
-            //
-
-            //CefSettings settings = new CefSettings()
-            //{
-            //    //CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache")
-            //};
-
-            //ChromeDevTools.Settings(ref settings);
-            //settings.RegisterScheme(new CefCustomScheme()
-            //{
-            //    SchemeName = "http",
-            //    SchemeHandlerFactory = new CefSharpSchemeHandlerFactory()
-            //});
-            //settings.RegisterScheme(new CefCustomScheme()
-            //{
-            //    SchemeName = "https",
-            //    SchemeHandlerFactory = new CefSharpSchemeHandlerFactory()
-            //});
-
-            //settings.CefCommandLineArgs.Add("enable-media-stream");
-            //settings.CefCommandLineArgs.Add("use-fake-ui-for-media-stream");
-            //settings.CefCommandLineArgs.Add("enable-usermedia-screen-capturing");
-
-            //if (!Cef.IsInitialized)
-            //{
-            //    //Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
-            //    Cef.Initialize(settings);
-            //}
-
-
             HTMLList.DataContext = new CustomCrawlerDataGridViewModel();
             HTMLList.Sorting += new DataGridSortingEventHandler(new DataGridSorter<CustomCrawlerDataGridItemViewModel>(HTMLList).SortHandler);
-
-
         }
 
         internal class CefSharpSchemeHandlerFactory : ISchemeHandlerFactory
