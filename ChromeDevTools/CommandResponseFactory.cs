@@ -17,7 +17,7 @@ namespace MasterDevs.ChromeDevTools
         private readonly JsonSerializer _serializer;
 
         public CommandResponseFactory(IMethodTypeMap methodTypeMap, ICommandFactory commandFactory)
-            : this(methodTypeMap, commandFactory, new JsonSerializer() { ContractResolver = new MessageContractResolver() })
+            : this(methodTypeMap, commandFactory, new JsonSerializer() { ContractResolver = new MessageContractResolver(), MaxDepth = 256 })
         {
         }
 
@@ -35,7 +35,9 @@ namespace MasterDevs.ChromeDevTools
 
         public ICommandResponse Create(string responseText)
         {
-            var jObject = JObject.Parse(responseText);
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, MaxDepth = 256 };
+            var jObject = JsonConvert.DeserializeObject<JObject>(responseText, settings);
+
             if (null != jObject["error"])
             {
                 return jObject.ToObject<ErrorResponse>();
