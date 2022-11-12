@@ -25,7 +25,7 @@
         <TextBlock FontSize="15" Text="URL: " Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
         <TextBox x:Name="URLText" Grid.Row="0" Grid.Column="1" FontSize="15"/>
         <Button Grid.Row="0" Grid.Column="2" Content="Navigate" Width="120" Margin="4 0 0 0" Click="Button_Click"  x:Name="Navigate"/>
-        <Button x:Name="Build" IsEnabled="False" Grid.Row="0" Grid.Column="3" Content="Build" Width="120" Margin="4 0 0 0" Click="Button_Click_1"/>
+        <Button x:Name="Build" IsEnabled="True" Grid.Row="0" Grid.Column="3" Content="Build" Width="120" Margin="4 0 0 0" Click="Button_Click_1"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="4" Margin="0 2 0 0">
             <TextBlock x:Name="F2" Text="F2: Lock" FontSize="15"/>
