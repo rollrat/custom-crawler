@@ -246,6 +246,14 @@ libcef: https://github.com/chromiumembedded/cefkit
 Selenium: https://github.com/SeleniumHQ/selenium
 ```
 
+## Bugs
+
+### Dynamics Build Not Working
+
+https://www.youtube.com/watch?v=kN0LtF9oWAk&list=RDOYIQ6AHHOsM&index=2&ab_channel=StarNone
+
+The command `GetDocumentCommand` is taking too long.
+
 ## Articles
 
 ### 크롤러 하나 만들어봤는데 써보실분?
