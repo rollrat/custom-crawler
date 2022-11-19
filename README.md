@@ -258,6 +258,8 @@ The command `GetDocumentCommand` is taking too long.
 
 ## Articles
 
-### 크롤러 하나 만들어봤는데 써보실분?
-
 https://gall.dcinside.com/board/view/?id=programming&no=1305926
+
+https://www.reddit.com/r/csharp/comments/g18j4j/ive_written_an_tools_to_help_you_make_a_crawler/
+
+https://www.reddit.com/r/csharp/comments/yry6dl/i_made_a_powerful_crawler_creation_tool_on_c/
