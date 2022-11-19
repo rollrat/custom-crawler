@@ -207,6 +207,8 @@ You can see where this element was created.
 
 ### 2.2. Find Download(Requested) Data Associated With Dynamic Added Elements
 
+![](res/r16.gif)
+
 This is where many people spend their time building crawlers.
 If you know which elements are associated with which files,
 the complexity of dynamic analysis can be greatly reduced.
