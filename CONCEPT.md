@@ -525,3 +525,11 @@ public List<Pattern> Extract(string html)
 ![](res/a10.png)
 
 ## 3. 동적 분석
+
+동적 분석에 관한 내용은 다음을 참고해주세요
+
+https://blog.naver.com/rollrat/221906735915
+
+https://blog.naver.com/rollrat/221908229380
+
+https://github.com/rollrat/custom-crawler/blob/master/Documents/Dynamics.md
