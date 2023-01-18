@@ -528,6 +528,8 @@ public List<Pattern> Extract(string html)
 
 동적 분석에 관한 내용은 다음을 참고해주세요
 
+https://blog.naver.com/rollrat/221905945071
+
 https://blog.naver.com/rollrat/221906735915
 
 https://blog.naver.com/rollrat/221908229380
